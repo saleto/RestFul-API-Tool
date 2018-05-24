@@ -1,6 +1,9 @@
 package pb360.service.impl;
 
+import java.util.ArrayList;
+
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -15,17 +18,21 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		MessageObject getMessage = new MessageObject();
 		getMessage.setData("Get RestApi data successful: " + id);
 		getMessage.setType("GET");
+		getMessage.setDatetime(getCurrentDateTime().getDatetime());
 
 		return getMessage;
 	}
 
 	@Override
-	public MessageObject searchRestApiData() {
+	public List<MessageObject> searchRestApiData() {
+		List<MessageObject> messageObjectList = new ArrayList<>();
 		MessageObject search = new MessageObject();
 		search.setData("Search RestApi data successful");
 		search.setType("GET ALL");
+		search.setDatetime(getCurrentDateTime().getDatetime());
 
-		return search;
+		messageObjectList.add(search);
+		return messageObjectList;
 	}
 
 	@Override
@@ -33,7 +40,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		MessageObject post = new MessageObject();
 		post.setData("“generate restapi files successful");
 		post.setType("POST");
-		post.setDatetime(getCurrentDateTime().getDate());
+		post.setDatetime(getCurrentDateTime().getDatetime());
 
 		return post;
 
@@ -44,6 +51,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		MessageObject patch = new MessageObject();
 		patch.setData("updated restapi files successful");
 		patch.setType("PATCH");
+		patch.setDatetime(getCurrentDateTime().getDatetime());
 
 		return patch;
 	}
@@ -52,6 +60,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		MessageObject delete = new MessageObject();
 		delete.setData("delete restapi files successful");
 		delete.setType("DELETE");
+		delete.setDatetime(getCurrentDateTime().getDatetime());
 
 		return delete;
 	}
