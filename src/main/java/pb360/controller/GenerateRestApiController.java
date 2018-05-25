@@ -31,10 +31,12 @@ public class GenerateRestApiController {
 	public HttpEntity<MessageObject> getRestApiDetails(@PathVariable("restId") String restId) {
 
 		MessageObject messageObj = generateRestApiService.getRestApiData(restId);
+		
 
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
 	}
 
+	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET)
 	public HttpEntity<Resources<Resource<MessageObject>>> searchAllRestApis() {
 
@@ -54,7 +56,8 @@ public class GenerateRestApiController {
 	@RequestMapping(value = "/{restId}", method = RequestMethod.DELETE)
 	public HttpEntity<MessageObject> deleteRestApiService(@PathVariable("restId") String restId) {
 
-		MessageObject messageObj = generateRestApiService.deleteRestApiData();
+		MessageObject messageObj = generateRestApiService.deleteRestApiData(restId);
+		messageObj = generateRestApiService.getRestApiData(restId);
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
 
 	}
@@ -63,7 +66,7 @@ public class GenerateRestApiController {
 
 	public HttpEntity<MessageObject> updateRestApiService(@PathVariable("restId") String restId) {
 
-		MessageObject messageObj = generateRestApiService.updateRestApiData();
+		MessageObject messageObj = generateRestApiService.updateRestApiData(restId);
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
 
 	}

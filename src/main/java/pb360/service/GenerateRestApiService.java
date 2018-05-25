@@ -4,6 +4,8 @@ import java.util.List;
 
 import pb360.model.MessageObject;
 
+
+
 public interface GenerateRestApiService {
 	
 	public MessageObject getRestApiData(String id);
@@ -12,8 +14,8 @@ public interface GenerateRestApiService {
 
 	public MessageObject createRestApiData();
 
-	public MessageObject updateRestApiData();
+	public MessageObject updateRestApiData(String restId);
 
-	public MessageObject deleteRestApiData();
+	public MessageObject deleteRestApiData(String restId);
 
 }

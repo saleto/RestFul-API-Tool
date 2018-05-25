@@ -1,5 +1,6 @@
 package pb360.model;
 
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import java.util.Date;
 
@@ -9,7 +10,9 @@ public class MessageObject extends ResourceSupport {
 	String data;
 	Date datetime;
 
+
 	public MessageObject() {
+		
 	}
 
 	public MessageObject(Date datetime, String type, String data) {
@@ -19,6 +22,7 @@ public class MessageObject extends ResourceSupport {
 		this.data = data;
 	}
 	
+
 	public MessageObject(String type, String data)
 	{
 		this.type = type;

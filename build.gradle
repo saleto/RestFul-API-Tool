@@ -26,7 +26,10 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-web'){
+	        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'  
+	    }
 	compile('org.springframework.hateoas:spring-hateoas:0.24.0.RELEASE')
+	compile('org.springframework.boot:spring-boot-starter-jetty')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

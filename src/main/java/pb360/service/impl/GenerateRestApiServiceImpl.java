@@ -25,7 +25,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	@Override
 	public List<MessageObject> searchRestApiData() {
-		List<MessageObject> messageObjectList = new ArrayList<>();
+		List<MessageObject> messageObjectList = new ArrayList<MessageObject>();
 		MessageObject search = new MessageObject();
 		search.setData("Search RestApi data successful");
 		search.setType("GET ALL");
@@ -47,18 +47,18 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	}
 
 	@Override
-	public MessageObject updateRestApiData() {
+	public MessageObject updateRestApiData(String restId) {
 		MessageObject patch = new MessageObject();
-		patch.setData("updated restapi files successful");
+		patch.setData("updated restapi files successful: " + restId);
 		patch.setType("PATCH");
 		patch.setDatetime(getCurrentDateTime().getDatetime());
 
 		return patch;
 	}
 
-	public MessageObject deleteRestApiData() {
+	public MessageObject deleteRestApiData(String restId) {
 		MessageObject delete = new MessageObject();
-		delete.setData("delete restapi files successful");
+		delete.setData("delete restapi files successful: " + restId);
 		delete.setType("DELETE");
 		delete.setDatetime(getCurrentDateTime().getDatetime());
 
