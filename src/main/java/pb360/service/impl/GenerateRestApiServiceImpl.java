@@ -26,6 +26,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	@Override
 	public List<MessageObject> searchRestApiData() {
 		List<MessageObject> messageObjectList = new ArrayList<MessageObject>();
+		
 		MessageObject search = new MessageObject();
 		search.setData("Search RestApi data successful");
 		search.setType("GET ALL");

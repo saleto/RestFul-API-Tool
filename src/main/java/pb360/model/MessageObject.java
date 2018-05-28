@@ -6,9 +6,9 @@ import java.util.Date;
 
 public class MessageObject extends ResourceSupport {
 
-	String type;
-	String data;
-	Date datetime;
+	private String type;
+	private String data;
+	private Date datetime;
 
 
 	public MessageObject() {
