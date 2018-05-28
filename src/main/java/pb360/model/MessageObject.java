@@ -1,6 +1,5 @@
 package pb360.model;
 
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceSupport;
 import java.util.Date;
 
