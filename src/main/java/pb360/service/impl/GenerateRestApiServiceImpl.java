@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import pb360.model.MessageObject;
+import pb360.model.RestAPI;
 import pb360.service.GenerateRestApiService;
 
 @Service
@@ -26,7 +27,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	@Override
 	public List<MessageObject> searchRestApiData() {
 		List<MessageObject> messageObjectList = new ArrayList<MessageObject>();
-		
+
 		MessageObject search = new MessageObject();
 		search.setData("Search RestApi data successful");
 		search.setType("GET ALL");
@@ -37,12 +38,11 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	}
 
 	@Override
-	public MessageObject createRestApiData() {
+	public MessageObject createRestApiData(RestAPI restApi) {
 		MessageObject post = new MessageObject();
-		post.setData("“generate restapi files successful");
+		post.setData("generate restapi files successful");
 		post.setType("POST");
 		post.setDatetime(getCurrentDateTime().getDatetime());
-
 		return post;
 
 	}

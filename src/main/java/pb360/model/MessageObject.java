@@ -9,9 +9,8 @@ public class MessageObject extends ResourceSupport {
 	private String data;
 	private Date datetime;
 
-
 	public MessageObject() {
-		
+
 	}
 
 	public MessageObject(Date datetime, String type, String data) {
@@ -20,10 +19,8 @@ public class MessageObject extends ResourceSupport {
 		this.type = type;
 		this.data = data;
 	}
-	
 
-	public MessageObject(String type, String data)
-	{
+	public MessageObject(String type, String data) {
 		this.type = type;
 		this.data = data;
 	}
@@ -35,7 +32,6 @@ public class MessageObject extends ResourceSupport {
 	public void setDatetime(Date datetime) {
 		this.datetime = datetime;
 	}
-
 
 	public String getType() {
 		return type;

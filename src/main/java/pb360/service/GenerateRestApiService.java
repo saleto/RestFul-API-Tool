@@ -3,6 +3,7 @@ package pb360.service;
 import java.util.List;
 
 import pb360.model.MessageObject;
+import pb360.model.RestAPI;
 
 
 
@@ -12,7 +13,7 @@ public interface GenerateRestApiService {
 
 	public List<MessageObject> searchRestApiData();
 
-	public MessageObject createRestApiData();
+	public MessageObject createRestApiData(RestAPI restApi );
 
 	public MessageObject updateRestApiData(String restId);
 
