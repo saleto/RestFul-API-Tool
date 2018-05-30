@@ -16,5 +16,10 @@ public class Validator implements org.springframework.validation.Validator {
 		// TODO Auto-generated method stub
 
 	}
+	
+	public void ValidateRestAPI()
+	{
+		
+	}
 
 }

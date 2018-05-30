@@ -1,24 +1,26 @@
 package pb360.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.hateoas.ResourceSupport;
 import java.util.Date;
 
-@Document(collection = "MessageObject")
-public class MessageObject {
+public class MessageObject extends ResourceSupport {
 
-	@Id
-	private String id;
-	String type;
-	String data;
-	Date datetime;
+	private String type;
+	private String data;
+	private Date datetime;
 
 	public MessageObject() {
+
 	}
 
 	public MessageObject(Date datetime, String type, String data) {
 
 		this.datetime = datetime;
+		this.type = type;
+		this.data = data;
+	}
+
+	public MessageObject(String type, String data) {
 		this.type = type;
 		this.data = data;
 	}
@@ -29,10 +31,6 @@ public class MessageObject {
 
 	public void setDatetime(Date datetime) {
 		this.datetime = datetime;
-	}
-
-	public Date getDate() {
-		return datetime;
 	}
 
 	public String getType() {

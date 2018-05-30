@@ -3,7 +3,9 @@ package pb360.data.entity;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "MessageObject")
 public final class MessageObject {
 
 	@Id
