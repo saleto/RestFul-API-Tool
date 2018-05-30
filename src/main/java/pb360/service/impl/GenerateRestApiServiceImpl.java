@@ -1,5 +1,8 @@
 package pb360.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import java.util.Date;
@@ -13,6 +16,7 @@ import pb360.service.GenerateRestApiService;
 
 @Service
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
+	public String ControllerName;
 
 	@Override
 	public MessageObject getRestApiData(String id) {
@@ -72,5 +76,16 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		date.setDatetime(datetime);
 
 		return date;
+	}
+	
+	private void createStructure() throws IOException {
+		Files.createDirectories(Paths.get("D:/"+ControllerName));
+		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.model"));
+		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.validation"));
+		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.options"));
+		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.service"));
+		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.controller"));
+		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.test"));
+
 	}
 }

@@ -8,6 +8,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import pb360.service.GenerateRestApiService;
 import pb360.validation.ValidateRestAPI;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -38,6 +42,7 @@ import org.springframework.hateoas.Resources;
 @RequestMapping("/v1/controllers")
 public class GenerateRestApiController {
 
+	//String Url = "D:\\restapi\\JSON_Sample.json";
 	@Autowired
 	private GenerateRestApiService generateRestApiService;
 	private ValidateRestAPI valiRestApi;
@@ -97,7 +102,6 @@ public class GenerateRestApiController {
 	public @ResponseBody HttpEntity<MessageObject> createRestApiService(@Valid @RequestBody RestAPI restApi) {
 		MessageObject messageObj = generateRestApiService.createRestApiData(restApi);
 
-		//messageObj = ValidateRestAPI.validate(restApi);
 
 		System.out.println(restApi.getRestId());
 		System.out.println(restApi.getRestName());
@@ -122,4 +126,6 @@ public class GenerateRestApiController {
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
 
 	}
+
+
 }
