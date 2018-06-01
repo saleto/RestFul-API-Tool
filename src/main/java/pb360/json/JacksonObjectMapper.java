@@ -13,14 +13,12 @@ import pb360.model.RestAPI;
 
 public class JacksonObjectMapper {
 	public static void main(String[] args) throws IOException{
-//		byte[] jsonData = Files.readAllBytes(Paths.get("D:/restapi/JSON_Sample.json"));
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		RestAPI restApi = objectMapper.readValue(jsonData, RestAPI.class);
-//		
-//		System.out.println("RestAPI Object\n"+restApi);
+
 		try {
 		ObjectMapper objectMapper = new ObjectMapper();
 		RestAPI restApi =objectMapper.readValue(new File("D:\\restapi\\JSON_Sample.json"), RestAPI.class);
+		
+		
 		}
 		catch(JsonGenerationException e) {
 			e.printStackTrace();

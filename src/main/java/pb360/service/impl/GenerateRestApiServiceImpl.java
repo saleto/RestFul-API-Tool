@@ -1,8 +1,7 @@
 package pb360.service.impl;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import java.util.Date;
@@ -10,6 +9,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import pb360.model.JsonDataModel;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
 import pb360.service.GenerateRestApiService;
@@ -17,6 +20,7 @@ import pb360.service.GenerateRestApiService;
 @Service
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
 	public String ControllerName;
+	public String link = "D:\\restapi\\JSON_Sample.json";
 
 	@Override
 	public MessageObject getRestApiData(String id) {
@@ -24,6 +28,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		getMessage.setData("Get RestApi data successful: " + id);
 		getMessage.setType("GET");
 		getMessage.setDatetime(getCurrentDateTime().getDatetime());
+		ReadJson(link);
 
 		return getMessage;
 	}
@@ -77,15 +82,26 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 		return date;
 	}
-	
-	private void createStructure() throws IOException {
-		Files.createDirectories(Paths.get("D:/"+ControllerName));
-		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.model"));
-		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.validation"));
-		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.options"));
-		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.service"));
-		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.controller"));
-		Files.createDirectories(Paths.get("D:/"+ControllerName+"/pb360.test"));
 
+
+	public void ReadJson(String link) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(Feature.AUTO_CLOSE_SOURCE, true);
+
+		try {
+
+			JsonDataModel jsonData = objectMapper.readValue(new File(link), JsonDataModel.class);
+			System.out.println(jsonData.getTitle());
+			System.out.println(jsonData.getModel());
+			System.out.println(jsonData.getValidator());
+			System.out.println(jsonData.getOptions());
+			System.out.println(jsonData.getService());
+			System.out.println(jsonData.getJUnitTest());
+			System.out.println(jsonData.getCommon());
+
+		} catch (IOException e) {
+			System.out.println(e);
+
+		}
 	}
 }
