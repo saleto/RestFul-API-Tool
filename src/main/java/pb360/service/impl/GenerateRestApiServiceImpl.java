@@ -1,16 +1,27 @@
 package pb360.service.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mongodb.util.JSON;
 
 import pb360.model.JsonDataModel;
 import pb360.model.MessageObject;
@@ -28,7 +39,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		getMessage.setData("Get RestApi data successful: " + id);
 		getMessage.setType("GET");
 		getMessage.setDatetime(getCurrentDateTime().getDatetime());
-		ReadJson(link);
+		readJson(link);
 
 		return getMessage;
 	}
@@ -84,24 +95,50 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	}
 
 
-	public void ReadJson(String link) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(Feature.AUTO_CLOSE_SOURCE, true);
+	private void readJson(String link) {
+
+		JsonDataModel jsonData = new JsonDataModel();
+		String inputStr= "";
 
 		try {
+			File initialFile = new File(link);
+			InputStream targetStream = new FileInputStream(initialFile);
+			BufferedReader buffReader = new BufferedReader(new InputStreamReader(targetStream));
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+			buffReader.readLine();
+			while ((inputStr = buffReader.readLine()) != null) {
+//				System.out.println(inputStr); doc duoc 
+				
+				
+				JsonParser jsonParser = new JsonFactory().createParser(mapper.writeValueAsString(inputStr));
+//				System.out.println(jsonParser);
+//				while(!jsonParser.isClosed()){
+//				    JsonToken jsonToken = jsonParser.nextToken();
+//
+//				    System.out.println("jsonToken = " + jsonToken);
+//				}
+//				ObjectNode node = mapper.readValue(jsonParser, ObjectNode.class);
+//				System.out.println(node);
 
-			JsonDataModel jsonData = objectMapper.readValue(new File(link), JsonDataModel.class);
-			System.out.println(jsonData.getTitle());
-			System.out.println(jsonData.getModel());
-			System.out.println(jsonData.getValidator());
-			System.out.println(jsonData.getOptions());
-			System.out.println(jsonData.getService());
-			System.out.println(jsonData.getJUnitTest());
-			System.out.println(jsonData.getCommon());
+//				if (node != null && node.has("title")) {															
+//					node.get("title").asText();
+//				} 
+				
+				JsonDataModel data = mapper.readValue(inputStr, JsonDataModel.class);
+				
+				
+				System.out.println(data);
+		
+			}
+			
+			
 
-		} catch (IOException e) {
-			System.out.println(e);
-
+		}  catch(IOException e)
+		{
+			e.printStackTrace();
 		}
+		
+		
 	}
 }

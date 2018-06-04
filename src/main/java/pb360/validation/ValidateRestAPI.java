@@ -31,30 +31,13 @@ public class ValidateRestAPI implements org.springframework.validation.Validator
 			messageObj.setData("restName");
 		}
 
-		if (restApi.getRestStatus() == null) {
-			messageObj.setType("Missing Field");
-			messageObj.setData("restStatus");
-		}
 
 		if (restApi.getRestUrl() == null) {
 			messageObj.setType("Missing Field");
 			messageObj.setData("restUrl");
 		}
 
-		if (restApi.getRestLocation() == null) {
-			messageObj.setType("Missing Field");
-			messageObj.setData("restLocation");
-		}
 
-		if (restApi.getLastModifying() == null) {
-			messageObj.setType("Missing Field");
-			messageObj.setData("lastModifying");
-		}
-
-		if (restApi.getFileOfRest() == null) {
-			messageObj.setType("Missing Field");
-			messageObj.setData("fileOfRest");
-		}
 
 		if (messageObj.getData() != null && !messageObj.getData().isEmpty()) {
 			errors.rejectValue(messageObj.getData(), messageObj.getType(), null);
