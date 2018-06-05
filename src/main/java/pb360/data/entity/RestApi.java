@@ -1,14 +1,17 @@
-package pb360.model;
+package pb360.data.entity;
 
 import java.util.Date;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(Include.NON_DEFAULT)
-public class RestAPI {
+import pb360.model.MessageObject;
 
+@Document(collection = "RestApi")
+
+public final class RestApi {
 	private String restId;
 
 	private String restName;
@@ -22,15 +25,14 @@ public class RestAPI {
 	private String restLocation;
 
 	private Date lastModifying;
-
-	public RestAPI() {
+	
+	public RestApi()
+	{
 		super();
 	}
-
-	public RestAPI(@JsonProperty("restId") String restId, @JsonProperty("restName") String restName,
-			@JsonProperty("restUrl") String restUrl, @JsonProperty("restStatus") MessageObject restStatus,
-			@JsonProperty("restfileOfRest") List<String> fileOfRest, @JsonProperty("restLocation") String restLocation,
-			@JsonProperty("lastModifying") Date lastModifying) {
+	
+	public RestApi(String restId, String restName,String restUrl,MessageObject restStatus,List<String> fileOfRest,String restLocation,Date lastModifying)
+	{
 		this.restId = restId;
 		this.restName = restName;
 		this.restUrl = restUrl;
@@ -38,7 +40,6 @@ public class RestAPI {
 		this.fileOfRest = fileOfRest;
 		this.restLocation = restLocation;
 		this.lastModifying = lastModifying;
-
 	}
 
 	public String getRestId() {

@@ -1,6 +1,9 @@
 package pb360.model;
 
 import org.springframework.hateoas.ResourceSupport;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class MessageObject extends ResourceSupport {
@@ -13,7 +16,8 @@ public class MessageObject extends ResourceSupport {
 
 	}
 
-	public MessageObject(Date datetime, String type, String data) {
+	public MessageObject(@JsonProperty("datetime") Date datetime, @JsonProperty("type") String type,
+			@JsonProperty("data") String data) {
 
 		this.datetime = datetime;
 		this.type = type;
