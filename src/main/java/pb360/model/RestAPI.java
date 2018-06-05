@@ -9,22 +9,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_DEFAULT)
 public class RestAPI {
 
-	private @JsonProperty("restId") String restId;
+	private String restId;
 
-	private @JsonProperty("restName") String restName;
+	private String restName;
 
-	private @JsonProperty("restUrl") String restUrl;
+	private String restUrl;
 
-	private @JsonProperty("restStatus") MessageObject restStatus;
+	private MessageObject restStatus;
 
-	private @JsonProperty("fileOfRest") List<String> fileOfRest;
+	private List<String> fileOfRest;
 
-	private @JsonProperty("restLocation") String restLocation;
+	private String restLocation;
 
-	private @JsonProperty("lastModifying") Date lastModifying;
+	private Date lastModifying;
 
 	public RestAPI() {
-
+		super();
 	}
 
 	public RestAPI(@JsonProperty("restId") String restId, @JsonProperty("restName") String restName,

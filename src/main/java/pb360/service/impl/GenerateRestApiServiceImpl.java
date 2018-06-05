@@ -39,8 +39,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		getMessage.setData("Get RestApi data successful: " + id);
 		getMessage.setType("GET");
 		getMessage.setDatetime(getCurrentDateTime().getDatetime());
-		readJson(link);
-
+		
 		return getMessage;
 	}
 
@@ -59,6 +58,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	@Override
 	public MessageObject createRestApiData(RestAPI restApi) {
+		readJson(link);
 		MessageObject post = new MessageObject();
 		post.setData("generate restapi files successful");
 		post.setType("POST");
@@ -98,7 +98,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	private void readJson(String link) {
 
 		JsonDataModel jsonData = new JsonDataModel();
-		String inputStr= "";
+		String inputStr;
+		StringBuilder stringBuilder = new StringBuilder();
 
 		try {
 			File initialFile = new File(link);
@@ -106,32 +107,20 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			BufferedReader buffReader = new BufferedReader(new InputStreamReader(targetStream));
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-			buffReader.readLine();
-			while ((inputStr = buffReader.readLine()) != null) {
-//				System.out.println(inputStr); doc duoc 
+			int n = 0;
+			while (( buffReader.readLine()) != null) {
+				stringBuilder.append(buffReader.readLine());
 				
-				
-				JsonParser jsonParser = new JsonFactory().createParser(mapper.writeValueAsString(inputStr));
-//				System.out.println(jsonParser);
-//				while(!jsonParser.isClosed()){
-//				    JsonToken jsonToken = jsonParser.nextToken();
-//
-//				    System.out.println("jsonToken = " + jsonToken);
-//				}
-//				ObjectNode node = mapper.readValue(jsonParser, ObjectNode.class);
-//				System.out.println(node);
-
-//				if (node != null && node.has("title")) {															
-//					node.get("title").asText();
-//				} 
-				
-				JsonDataModel data = mapper.readValue(inputStr, JsonDataModel.class);
-				
-				
-				System.out.println(data);
 		
 			}
+			inputStr = stringBuilder.toString();F
 			
+            JsonParser jsonParser = new JsonFactory().createParser(mapper.writeValueAsString(inputStr));
+            
+            System.out.println(jsonParser);
+			
+			
+
 			
 
 		}  catch(IOException e)

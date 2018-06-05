@@ -16,7 +16,7 @@ public class JsonDataModel {
 	}
 	
 
-	public JsonDataModel(@JsonProperty("title") String title, @JsonProperty("nodeList") List<JsonNode> nodeList) {
+	public JsonDataModel(@JsonProperty("title") String title, @JsonProperty List<JsonNode> nodeList) {
 		this.title = title;
 		this.nodeList = nodeList;
 	}

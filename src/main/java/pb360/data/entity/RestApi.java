@@ -9,22 +9,38 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import pb360.model.MessageObject;
 
-@Document(collection= "RestApi")
+@Document(collection = "RestApi")
 
 public final class RestApi {
-	private @JsonProperty("restId") String restId;
+	private String restId;
 
-	private @JsonProperty("restName") String restName;
+	private String restName;
 
-	private @JsonProperty("restUrl") String restUrl;
+	private String restUrl;
 
-	private @JsonProperty("restStatus") MessageObject restStatus;
+	private MessageObject restStatus;
 
-	private @JsonProperty("fileOfRest") List<String> fileOfRest;
+	private List<String> fileOfRest;
 
-	private @JsonProperty("restLocation") String restLocation;
+	private String restLocation;
 
-	private @JsonProperty("lastModifying") Date lastModifying;
+	private Date lastModifying;
+	
+	public RestApi()
+	{
+		super();
+	}
+	
+	public RestApi(String restId, String restName,String restUrl,MessageObject restStatus,List<String> fileOfRest,String restLocation,Date lastModifying)
+	{
+		this.restId = restId;
+		this.restName = restName;
+		this.restUrl = restUrl;
+		this.restStatus = restStatus;
+		this.fileOfRest = fileOfRest;
+		this.restLocation = restLocation;
+		this.lastModifying = lastModifying;
+	}
 
 	public String getRestId() {
 		return restId;
