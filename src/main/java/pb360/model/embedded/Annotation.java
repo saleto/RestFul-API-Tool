@@ -13,9 +13,7 @@ public class Annotation {
 	}
 	public Annotation( @JsonProperty("annotationContent")  String annotationContent)
 	{
-//		this.annotationStarts = annotationStarts;
 		this.annotationContent = annotationContent;
-//		this.annotationEnds = annotationEnds;
 	}
 	public String getAnnotationStarts() {
 		return annotationStarts;

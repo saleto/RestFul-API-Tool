@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.util.JSON;
@@ -32,6 +33,7 @@ import pb360.service.GenerateRestApiService;
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
 	public String ControllerName;
 	public String link = "D:\\restapi\\JSON_Sample.json";
+	ObjectNode node;
 
 	@Override
 	public MessageObject getRestApiData(String id) {
@@ -106,18 +108,33 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			InputStream targetStream = new FileInputStream(initialFile);
 			BufferedReader buffReader = new BufferedReader(new InputStreamReader(targetStream));
 			ObjectMapper mapper = new ObjectMapper();
-			mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+//			mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+			
 			int n = 0;
 			while (( buffReader.readLine()) != null) {
 				stringBuilder.append(buffReader.readLine());
 				
 		
 			}
-			inputStr = stringBuilder.toString();F
+			inputStr = stringBuilder.toString();
+			inputStr = inputStr.replaceAll("\\s","");
+//			inputStr = "{" + inputStr + "}" ;
+			System.out.println(inputStr);
+//            JsonParser jsonParser = new JsonFactory().createParser(mapper.writeValueAsString(inputStr));
+//            node = mapper.readValue(jsonParser, ObjectNode.class);
+//            
+//            if (node != null && node.has("title")) {
+//                node.get("title").asText();
+//            }
+//            node.path("Model").textValue();
+//			JsonNode jsonNode = mapper.readTree(inputStr);
+//			System.out.println(jsonNode.get("title").asText());
 			
-            JsonParser jsonParser = new JsonFactory().createParser(mapper.writeValueAsString(inputStr));
+			
             
-            System.out.println(jsonParser);
+//            jsonData = mapper.readValue(inputStr, JsonDataModel.class);
+//            System.out.println(node.get("title").asText());
+			
 			
 			
 
