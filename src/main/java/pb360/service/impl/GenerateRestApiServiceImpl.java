@@ -3,9 +3,11 @@ package pb360.service.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 
 import java.util.Date;
@@ -14,26 +16,23 @@ import java.util.List;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonParser.Feature;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mongodb.util.JSON;
+
 
 import pb360.model.JsonDataModel;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
+import pb360.model.embedded.Annotations;
+import pb360.model.embedded.JsonNode;
 import pb360.service.GenerateRestApiService;
 
 @Service
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
 	public String ControllerName;
 	public String link = "D:\\restapi\\JSON_Sample.json";
-	ObjectNode node;
+	
 
 	@Override
 	public MessageObject getRestApiData(String id) {
@@ -103,37 +102,49 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		String inputStr;
 		StringBuilder stringBuilder = new StringBuilder();
 
+
 		try {
 			File initialFile = new File(link);
 			InputStream targetStream = new FileInputStream(initialFile);
 			BufferedReader buffReader = new BufferedReader(new InputStreamReader(targetStream));
 			ObjectMapper mapper = new ObjectMapper();
 //			mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+			mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			
-			int n = 0;
-			while (( buffReader.readLine()) != null) {
-				stringBuilder.append(buffReader.readLine());
+			String line = "";
+			
+			while (( line = buffReader.readLine()) != null) {
+				stringBuilder.append(line);
+			} 
+			targetStream.close();
+			buffReader.close();
 				
 		
-			}
+			
 			inputStr = stringBuilder.toString();
 			inputStr = inputStr.replaceAll("\\s","");
-//			inputStr = "{" + inputStr + "}" ;
 			System.out.println(inputStr);
-//            JsonParser jsonParser = new JsonFactory().createParser(mapper.writeValueAsString(inputStr));
-//            node = mapper.readValue(jsonParser, ObjectNode.class);
-//            
-//            if (node != null && node.has("title")) {
-//                node.get("title").asText();
-//            }
-//            node.path("Model").textValue();
-//			JsonNode jsonNode = mapper.readTree(inputStr);
-//			System.out.println(jsonNode.get("title").asText());
+
 			
 			
             
 //            jsonData = mapper.readValue(inputStr, JsonDataModel.class);
+            
+            String title = jsonData.getTitle();
+            System.out.println("title = " + "Controller Name");
+//            Annotations anno = jsonData.getModel().getclassAnnotation().get(0);
+            
+           
+//            	System.out.println("content: " +anno.getAnnotations().get(0).getAnnotationContent());
+//            	System.out.println("start: " +anno.getAnnotations().get(0).getAnnotationStarts());
+//            	System.out.println("end: " +anno.getAnnotations().get(0).getAnnotationEnds());
+            
+            
+//            System.out.println(jsonData.getModel().getClassAnnotationList().);
 //            System.out.println(node.get("title").asText());
+            
+//            write2Java(inputStr, "testFile");
 			
 			
 			
@@ -143,8 +154,30 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		}  catch(IOException e)
 		{
 			e.printStackTrace();
+		}	
+		
+		//write to java file.
+		
+		
+		
+	}
+	
+	public void write2Java(String stringData, String fileName)
+	{
+		try {
+			
+			File file = new File(fileName+".java");
+			if (file.exists()) {
+			      file.delete();
+			 }
+			 file.createNewFile();
+			
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write(stringData);
+			fileWriter.flush();
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		
-		
 	}
 }

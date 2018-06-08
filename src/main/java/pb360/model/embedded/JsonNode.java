@@ -6,41 +6,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JsonNode {
 	private String packages;
-	private List<Annotation> classAnnotationList;
+	private List<Annotations> classAnotation;
 	private String classHeader;
-	private List<method> Method;
+	private List<Methods> Method;
 
-	public JsonNode(@JsonProperty("package") String packages,
-			@JsonProperty("classAnotation") List<Annotation> classAnnotationList,
+	public JsonNode (@JsonProperty("package") String packages,
+			@JsonProperty("classAnotation") List<Annotations> classAnotation,
 			@JsonProperty("classHeader") String classHeader,
-			@JsonProperty("method") List<method> Method) {
+			@JsonProperty("methods") List<Methods> Method) {
 		
 		this.packages = packages;
-		this.classAnnotationList = classAnnotationList;
+		this.classAnotation = classAnotation;
 		this.classHeader = classHeader;
 		this.Method = Method;
 
 	}
 
-	public List<method> getMethod() {
+	public List<Methods> getMethod() {
 		return Method;
 	}
 
-	public void setMethod(List<method> method) {
-		Method = method;
+	public void setMethod(List<Methods> Methods) {
+		Method = Methods;
 	}
 
 	public JsonNode() {
 		super();
 	}
 
-//	public String getNodeName() {
-//		return nodeName;
-//	}
-//
-//	public void setNodeName(String nodeName) {
-//		this.nodeName = nodeName;
-//	}
 
 	public String getPackages() {
 		return packages;
@@ -50,12 +43,12 @@ public class JsonNode {
 		this.packages = packages;
 	}
 
-	public List<Annotation> getClassAnnotationList() {
-		return classAnnotationList;
+	public List<Annotations> getclassAnotation() {
+		return classAnotation;
 	}
 
-	public void setClassAnnotationList(List<Annotation> classAnnotationList) {
-		this.classAnnotationList = classAnnotationList;
+	public void setclassAnotation(List<Annotations> classAnotation) {
+		this.classAnotation = classAnotation;
 	}
 
 	public String getClassHeader() {

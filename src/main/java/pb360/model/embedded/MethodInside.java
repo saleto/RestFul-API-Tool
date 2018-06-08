@@ -2,7 +2,9 @@ package pb360.model.embedded;
 
 import java.util.List;
 
-public class method {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class MethodInside {
 	private String header;
 	private String body;
 	private List<String> line;
@@ -24,12 +26,11 @@ public class method {
 	public void setLine(List<String> line) {
 		this.line = line;
 	}
-	public method() {
+	public MethodInside() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public method(String header, String body, List<String> line) {
-		super();
+	public MethodInside(@JsonProperty("header") String header,@JsonProperty("body") String body,@JsonProperty("line") List<String> line) {
 		this.header = header;
 		this.body = body;
 		this.line = line;
