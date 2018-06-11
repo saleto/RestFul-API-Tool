@@ -1,12 +1,15 @@
 package pb360.model.embedded;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Annotations {
+	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private List<AnnotationInside> annotations;
-	private String annotation;
 	
 	public Annotations()
 	{
@@ -14,21 +17,13 @@ public class Annotations {
 	}
 	public Annotations( @JsonProperty("annotation")  List<AnnotationInside>  annotations)
 	{
-		this.annotations = annotations;
+		
+			this.annotations=annotations;
 	}
 	
-	public Annotations(@JsonProperty("annotation") String annotation)
-	{
-		this.annotation = annotation;
-	}
 
 	
-	public String getAnnotation() {
-		return annotation;
-	}
-	public void setAnnotation(String annotation) {
-		this.annotation = annotation;
-	}
+
 	public List<AnnotationInside> getAnnotations() {
 		return annotations;
 	}

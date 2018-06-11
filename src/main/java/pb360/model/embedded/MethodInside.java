@@ -6,34 +6,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MethodInside {
 	private String header;
-	private String body;
-	private List<String> line;
+	private List<Line> body;
+//	private List<String> line;
 	public String getHeader() {
 		return header;
 	}
 	public void setHeader(String header) {
 		this.header = header;
 	}
-	public String getBody() {
+	public List<Line> getBody() {
 		return body;
 	}
-	public void setBody(String body) {
+	public void setBody(List<Line> body) {
 		this.body = body;
 	}
-	public List<String> getLine() {
-		return line;
-	}
-	public void setLine(List<String> line) {
-		this.line = line;
-	}
+
 	public MethodInside() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public MethodInside(@JsonProperty("header") String header,@JsonProperty("body") String body,@JsonProperty("line") List<String> line) {
+	public MethodInside(@JsonProperty("header") String header,@JsonProperty("body") List<Line> body) {
 		this.header = header;
 		this.body = body;
-		this.line = line;
 	}
 	
 	
