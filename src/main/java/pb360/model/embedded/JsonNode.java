@@ -9,6 +9,7 @@ public class JsonNode {
 	private List<Annotations> classAnotation;
 	private String classHeader;
 	private List<Methods> Method;
+	private String name;
 
 	public JsonNode (@JsonProperty("package") String packages,
 			@JsonProperty("classAnotation") List<Annotations> classAnotation,
