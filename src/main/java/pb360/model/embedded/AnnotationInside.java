@@ -19,21 +19,14 @@ public class AnnotationInside {
 			@JsonProperty("annotationContent") List<String> annotationContent,
 			@JsonProperty("annotationEnds") String annotationEnds,
 			@JsonProperty("annotation") String annotations) {
-		
-		if(annotations instanceof String)
-		{
+
 			this.annotations=annotations;
-			this.annotationStarts = null;
-			this.annotationContent = null;
-			this.annotationEnds = null;
-		}
-		else {
+
 
 		this.annotationStarts = annotationStarts;
 		this.annotationContent = annotationContent;
 		this.annotationEnds = annotationEnds;
-		}
-	
+
 	
 	}
 	
