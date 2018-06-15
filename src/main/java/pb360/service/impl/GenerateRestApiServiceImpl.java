@@ -16,8 +16,10 @@ import org.json.simple.parser.ParseException;
 
 import org.springframework.stereotype.Service;
 
+import pb360.model.JsonDataModel;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
+import pb360.model.embedded.JsonNode;
 import pb360.service.GenerateRestApiService;
 
 @Service
@@ -87,6 +89,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	}
 
 	private void readJson(String link) {
+		JsonDataModel jData = new JsonDataModel();
 
 		JSONParser parser = new JSONParser();
 
@@ -98,8 +101,9 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 			// title
 			String title = (String) jsonObject.get("title");
+			jData.setTitle(jsonObject.get("title").toString());
 
-			readMode(jsonObject);
+			readModel(jsonObject, jData);
 			readOption(jsonObject);
 			readService(jsonObject);
 			readJUnitTest(jsonObject);
@@ -117,12 +121,21 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	}
 	
-	public void readMode(JSONObject jsonObject) {
+	public void readModel(JSONObject jsonObject, JsonDataModel jData) {
 		// Model
+		JsonNode jNode = new JsonNode();
 		JSONArray modelArray = (JSONArray) jsonObject.get("Model");
 		for (int i = 0; i < modelArray.size(); i++) {
 			JSONObject object = (JSONObject) modelArray.get(i);
+//			jData.setModel();
 			String packageName = (String) object.get("package");
+			String classHeader = (String) object.get("classHeader");
+			jNode.setPackages(packageName);
+			jNode.setClassHeader(classHeader);
+			
+			
+			
+			jData.setModel(jNode);
 
 			// loop classAnotationArray
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
@@ -139,20 +152,24 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	public void readValidator(JSONObject jsonObject)
 	{
 		//Validator
+		JsonNode jNode = new JsonNode();
 		JSONArray validatorArray = (JSONArray) jsonObject.get("Validator");
 		for (int i = 0; i < validatorArray.size(); i++) {
-			JSONObject objectVA = (JSONObject) validatorArray.get(i);
-			String packageNameVa = (String) objectVA.get("package");
-			String classHeaderVa = (String) objectVA.get("classHeader");
+			JSONObject object = (JSONObject) validatorArray.get(i);
+			String packageName = (String) object.get("package");
+			String classHeader = (String) object.get("classHeader");
+			jNode.setPackages(packageName);
+			jNode.setClassHeader(classHeader);
+			
 
 			// loop classAnotationArray
-			JSONArray classAnotationVa = (JSONArray) objectVA.get("classAnotation");
-			for (int a = 0; a < classAnotationVa.size(); a++) {
-				JSONObject objectClassVa = (JSONObject) classAnotationVa.get(a);
-				JSONObject annotationVa = (JSONObject) objectClassVa.get("annotation");
-				String annotationContentVa = (String) annotationVa.get("annotationContent");
+			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
+			for (int a = 0; a < classAnotation.size(); a++) {
+				JSONObject objectClass = (JSONObject) classAnotation.get(a);
+				JSONObject annotation = (JSONObject) objectClass.get("annotation");
+				String annotationContent = (String) annotation.get("annotationContent");
 				
-				System.out.println("\n"+annotationContentVa);
+				System.out.println("\n"+annotationContent);
 			}
 		
 		}
@@ -286,7 +303,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	
 	
 
-	public void write2Java(String stringData, String fileName) {
+	public void writeToJavaFile(String stringData, String fileName) {
 		try {
 
 			File file = new File(fileName + ".java");
