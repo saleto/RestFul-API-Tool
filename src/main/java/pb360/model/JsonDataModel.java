@@ -1,24 +1,27 @@
 package pb360.model;
 
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import pb360.model.embedded.JsonNode;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_DEFAULT)
 public class JsonDataModel {
 	private String title;
-	private List<JsonNode> nodeList;
+	private List<JsonNode> nodes;
 
 	public JsonDataModel() {
 		super();
 	}
-	
 
-	public JsonDataModel(@JsonProperty("title") String title, @JsonProperty List<JsonNode> nodeList) {
+	public JsonDataModel(@JsonProperty("title") String title, @JsonProperty("nodes") List<JsonNode> nodes) {
 		this.title = title;
-		this.nodeList = nodeList;
+		this.nodes = nodes;
+
 	}
 
 	public String getTitle() {
@@ -29,11 +32,12 @@ public class JsonDataModel {
 		this.title = title;
 	}
 
-	public List<JsonNode> getNodeList() {
-		return nodeList;
+	public List<JsonNode> getNodes() {
+		return nodes;
 	}
 
-	public void setNodeList(List<JsonNode> nodeList) {
-		this.nodeList = nodeList;
+	public void setNodes(List<JsonNode> nodes) {
+		this.nodes = nodes;
 	}
+
 }

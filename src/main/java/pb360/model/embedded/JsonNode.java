@@ -4,34 +4,37 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JsonNode {// sua lai cho dung cau truc, tham khao jsondatamodel nha e, da
-	private String nodeName;
+public class JsonNode {
 	private String packages;
-	private List<Annotation> classAnnotationList;
+	private List<AnnotationInside> classAnotation;
 	private String classHeader;
+	private List<Methods> Method;
+	private String name;
 
-	public JsonNode(@JsonProperty("nodeName") String nodeName, @JsonProperty("package") String packages,
-			@JsonProperty("classAnnotationList") List<Annotation> classAnnotationList,
-			@JsonProperty("classHeader") String classHeader) {
-		this.nodeName = nodeName;
+	public JsonNode (@JsonProperty("package") String packages,
+			@JsonProperty("classAnotation") List<AnnotationInside> classAnotation,
+			@JsonProperty("classHeader") String classHeader,
+			@JsonProperty("methods") List<Methods> Method) {
+		
 		this.packages = packages;
-		this.classAnnotationList = classAnnotationList;
+		this.classAnotation = classAnotation;
 		this.classHeader = classHeader;
+		this.Method = Method;
 
 	}
-	
-	public JsonNode()
-	{
+
+	public List<Methods> getMethod() {
+		return Method;
+	}
+
+	public void setMethod(List<Methods> Methods) {
+		Method = Methods;
+	}
+
+	public JsonNode() {
 		super();
 	}
 
-	public String getNodeName() {
-		return nodeName;
-	}
-
-	public void setNodeName(String nodeName) {
-		this.nodeName = nodeName;
-	}
 
 	public String getPackages() {
 		return packages;
@@ -41,12 +44,12 @@ public class JsonNode {// sua lai cho dung cau truc, tham khao jsondatamodel nha
 		this.packages = packages;
 	}
 
-	public List<Annotation> getClassAnnotationList() {
-		return classAnnotationList;
+	public List<AnnotationInside> getclassAnotation() {
+		return classAnotation;
 	}
 
-	public void setClassAnnotationList(List<Annotation> classAnnotationList) {
-		this.classAnnotationList = classAnnotationList;
+	public void setclassAnotation(List<AnnotationInside> classAnotation) {
+		this.classAnotation = classAnotation;
 	}
 
 	public String getClassHeader() {
