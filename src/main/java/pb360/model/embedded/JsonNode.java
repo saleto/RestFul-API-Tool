@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JsonNode {
 	private String packages;
-	private List<Annotations> classAnotation;
+	private List<AnnotationInside> classAnotation;
 	private String classHeader;
 	private List<Methods> Method;
 	private String name;
 
 	public JsonNode (@JsonProperty("package") String packages,
-			@JsonProperty("classAnotation") List<Annotations> classAnotation,
+			@JsonProperty("classAnotation") List<AnnotationInside> classAnotation,
 			@JsonProperty("classHeader") String classHeader,
 			@JsonProperty("methods") List<Methods> Method) {
 		
@@ -44,11 +44,11 @@ public class JsonNode {
 		this.packages = packages;
 	}
 
-	public List<Annotations> getclassAnotation() {
+	public List<AnnotationInside> getclassAnotation() {
 		return classAnotation;
 	}
 
-	public void setclassAnotation(List<Annotations> classAnotation) {
+	public void setclassAnotation(List<AnnotationInside> classAnotation) {
 		this.classAnotation = classAnotation;
 	}
 

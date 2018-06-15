@@ -17,17 +17,13 @@ public class AnnotationInside {
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public AnnotationInside(@JsonProperty("annotationStarts") String annotationStarts,
 			@JsonProperty("annotationContent") List<String> annotationContent,
-			@JsonProperty("annotationEnds") String annotationEnds,
-			@JsonProperty("annotation") String annotations) {
+			@JsonProperty("annotationEnds") String annotationEnds, @JsonProperty("annotation") String annotations) {
 
-			this.annotations=annotations;
-
-
+		this.annotations = annotations;
 		this.annotationStarts = annotationStarts;
 		this.annotationContent = annotationContent;
 		this.annotationEnds = annotationEnds;
 
-	
 	}
 	
 	
