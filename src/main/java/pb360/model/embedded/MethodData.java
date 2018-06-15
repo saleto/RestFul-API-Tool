@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MethodInside {
+public class MethodData {
 	private String header;
 	private List<String> body;
 //	private List<String> String;
@@ -21,11 +21,11 @@ public class MethodInside {
 		this.body = body;
 	}
 
-	public MethodInside() {
+	public MethodData() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public MethodInside(@JsonProperty("header") String header,@JsonProperty("body") List<String> body) {
+	public MethodData(@JsonProperty("header") String header,@JsonProperty("body") List<String> body) {
 		this.header = header;
 		this.body = body;
 	}

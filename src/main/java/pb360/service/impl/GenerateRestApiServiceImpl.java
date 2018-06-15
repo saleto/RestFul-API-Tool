@@ -19,18 +19,20 @@ import org.springframework.stereotype.Service;
 import pb360.model.JsonDataModel;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
+import pb360.model.embedded.AnnotationData;
 import pb360.model.embedded.JsonNode;
 import pb360.service.GenerateRestApiService;
 
 @Service
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
-	public String ControllerName;
-	public String link = "D:\\restapi\\JSON_Sample.json";
+
+	private static final String json_link = "D:\\restapi\\JSON_Sample.json";
+	private static final String SEPARATOR_BLANK = "";
 
 	@Override
-	public MessageObject getRestApiData(String id) {
+	public MessageObject getRestApiData(String restId) {
 		MessageObject getMessage = new MessageObject();
-		getMessage.setData("Get RestApi data successful: " + id);
+		getMessage.setData("Get RestApi data successful: " + restId);
 		getMessage.setType("GET");
 		getMessage.setDatetime(getCurrentDateTime().getDatetime());
 
@@ -52,13 +54,13 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	@Override
 	public MessageObject createRestApiData(RestAPI restApi) {
-		readJson(link);
+		readJson(json_link);
 		MessageObject post = new MessageObject();
 		post.setData("generate restapi files successful");
 		post.setType("POST");
 		post.setDatetime(getCurrentDateTime().getDatetime());
-		return post;
 
+		return post;
 	}
 
 	@Override
@@ -90,26 +92,23 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	private void readJson(String link) {
 		JsonDataModel jsonDataModel = new JsonDataModel();
+		List<JsonNode> jsonNodeList = new ArrayList<JsonNode>();
+
 		JSONParser parser = new JSONParser();
 		try {
 
 			Object obj = parser.parse(new FileReader(link));
-			List<JsonNode> JsonNodeList = new ArrayList<JsonNode>();
-
 			JSONObject jsonObject = (JSONObject) obj;
 
-			// title
-			String title = (String) jsonObject.get("title");
-			
-			JsonNodeList.add(readModel(jsonObject));
-			JsonNodeList.add(readOption(jsonObject));
-			JsonNodeList.add(readService(jsonObject));
-			JsonNodeList.add(readJUnitTest(jsonObject));
-			JsonNodeList.add(readController(jsonObject));
-			
-			
+			jsonNodeList.add(readModel(jsonObject));
+			jsonNodeList.add(readOption(jsonObject));
+			jsonNodeList.add(readService(jsonObject));
+			jsonNodeList.add(readJUnitTest(jsonObject));
+			jsonNodeList.add(readController(jsonObject));
+
 			jsonDataModel.setTitle(jsonObject.get("title").toString());
-			jsonDataModel.setNodes(JsonNodeList);
+			jsonDataModel.setNodes(jsonNodeList);
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -117,42 +116,41 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		
-
 	}
-	
+
 	public JsonNode readModel(JSONObject jsonObject) {
-		JsonNode JsonNode = new JsonNode();
+		JsonNode jsonNode = new JsonNode();
 		JSONArray modelArray = (JSONArray) jsonObject.get("Model");
-		for (int i = 0; i < modelArray.size(); i++) {
-			JSONObject object = (JSONObject) modelArray.get(i);
-//			jData.setModel();
+		for (int index = 0; index < modelArray.size(); index++) {
+			JSONObject object = (JSONObject) modelArray.get(index);
 			String packageName = (String) object.get("package");
 			String classHeader = (String) object.get("classHeader");
-			JsonNode.setPackages(packageName);
-			JsonNode.setClassHeader(classHeader);
-			
-			
+			jsonNode.setPackages(packageName);
+			jsonNode.setClassHeader(classHeader);
 
-
-			// loop classAnotationArray
+			AnnotationData annotationData = new AnnotationData();
+			List<String> annotationContentList = new ArrayList<>();
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
-			for (int a = 0; a < classAnotation.size(); a++) {
-				JSONObject objectClass = (JSONObject) classAnotation.get(a);
+			for (int annoIndex = 0; annoIndex < classAnotation.size(); annoIndex++) {
+				JSONObject objectClass = (JSONObject) classAnotation.get(annoIndex);
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
-				String annotationContent = (String) annotation.get("annotationContent");
 
+				String annotationContent = (String) annotation.get("annotationContent");
+				if (annotationContent != null && !annotationContent.trim().isEmpty()) {
+					annotationContentList.add(annotationContent);
+				}
 			}
 
+			annotationData.setAnnotationStarts(SEPARATOR_BLANK);
+			annotationData.setAnnotationContent(annotationContentList);
+			annotationData.setAnnotationEnds(SEPARATOR_BLANK);
 		}
-		//add return o day, retuen caijNode ve cho a
-		return JsonNode;
+
+		return jsonNode;
 	}
-	
-	public JsonNode readValidator(JSONObject jsonObject)
-	{
-		//Validator
+
+	public JsonNode readValidator(JSONObject jsonObject) {
+		// Validator
 		JsonNode JsonNode = new JsonNode();
 		JSONArray validatorArray = (JSONArray) jsonObject.get("Validator");
 		for (int i = 0; i < validatorArray.size(); i++) {
@@ -161,7 +159,6 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			String classHeader = (String) object.get("classHeader");
 			JsonNode.setPackages(packageName);
 			JsonNode.setClassHeader(classHeader);
-			
 
 			// loop classAnotationArray
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
@@ -169,19 +166,17 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 				JSONObject objectClass = (JSONObject) classAnotation.get(a);
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
 				String annotationContent = (String) annotation.get("annotationContent");
-				
-				System.out.println("\n"+annotationContent);
+
+				System.out.println("\n" + annotationContent);
 			}
-		
+
 		}
-		
+
 		return JsonNode;
 	}
-	
-	
-	public JsonNode readOption(JSONObject jsonObject)
-	{
-		//Options
+
+	public JsonNode readOption(JSONObject jsonObject) {
+		// Options
 		JsonNode JsonNode = new JsonNode();
 		JSONArray optionsArray = (JSONArray) jsonObject.get("Options");
 		for (int i = 0; i < optionsArray.size(); i++) {
@@ -198,23 +193,22 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
 				String annotationContent = (String) annotation.get("annotationContent");
 			}
-			
-//			JSONArray methods = (JSONArray) object.get("methods");
-//			for (int b = 0; b < methods.size(); b++) {
-//				JSONObject objectClass = (JSONObject) methods.get(b);
-//				JSONObject method = (JSONObject) objectClass.get("method");
-//				String headerContent = (String) method.get("header").toString();
-//				
-//			}
-		
+
+			// JSONArray methods = (JSONArray) object.get("methods");
+			// for (int b = 0; b < methods.size(); b++) {
+			// JSONObject objectClass = (JSONObject) methods.get(b);
+			// JSONObject method = (JSONObject) objectClass.get("method");
+			// String headerContent = (String) method.get("header").toString();
+			//
+			// }
+
 		}
-		
+
 		return JsonNode;
 	}
-	
-	public JsonNode readService(JSONObject jsonObject)
-	{
-		//Service
+
+	public JsonNode readService(JSONObject jsonObject) {
+		// Service
 		JsonNode JsonNode = new JsonNode();
 		JSONArray serviceArray = (JSONArray) jsonObject.get("Service");
 		for (int i = 0; i < serviceArray.size(); i++) {
@@ -231,21 +225,20 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
 				String annotationContent = (String) annotation.get("annotationContent");
 			}
-			
+
 			JSONArray methods = (JSONArray) object.get("methods");
 			for (int b = 0; b < methods.size(); b++) {
 				JSONObject objectClass = (JSONObject) methods.get(b);
 				JSONObject method = (JSONObject) objectClass.get("method");
 				String headerContent = (String) method.get("header");
 			}
-		
+
 		}
-		
+
 		return JsonNode;
 	}
-	
-	public JsonNode readController(JSONObject jsonObject)
-	{
+
+	public JsonNode readController(JSONObject jsonObject) {
 		// Controller
 		JsonNode JsonNode = new JsonNode();
 		JSONArray controllerArray = (JSONArray) jsonObject.get("Controller");
@@ -281,14 +274,12 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		}
 		return JsonNode;
 	}
-	
-	
+
 	public JsonNode readJUnitTest(JSONObject jsonObject) {
 		// JUnitTest
 		JsonNode JsonNode = new JsonNode();
 		JSONArray jUnitTestArray = (JSONArray) jsonObject.get("JUnitTest");
-		for (int i = 0; i < jUnitTestArray.size(); i++) 
-		{
+		for (int i = 0; i < jUnitTestArray.size(); i++) {
 			JSONObject object = (JSONObject) jUnitTestArray.get(i);
 			String packageName = (String) object.get("package");
 			String classHeader = (String) object.get("classHeader");
@@ -320,9 +311,6 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		}
 		return JsonNode;
 	}
-	
-	
-	
 
 	public void writeToJavaFile(String stringData, String fileName) {
 		try {

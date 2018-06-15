@@ -1,5 +1,6 @@
 package pb360.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,7 +11,10 @@ import pb360.model.embedded.JsonNode;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_DEFAULT)
-public class JsonDataModel {
+public class JsonDataModel implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	private String title;
 	private List<JsonNode> nodes;
 
@@ -21,7 +25,6 @@ public class JsonDataModel {
 	public JsonDataModel(@JsonProperty("title") String title, @JsonProperty("nodes") List<JsonNode> nodes) {
 		this.title = title;
 		this.nodes = nodes;
-
 	}
 
 	public String getTitle() {

@@ -4,9 +4,12 @@ import org.springframework.hateoas.ResourceSupport;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MessageObject extends ResourceSupport {
+public class MessageObject extends ResourceSupport implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String type;
 	private String data;

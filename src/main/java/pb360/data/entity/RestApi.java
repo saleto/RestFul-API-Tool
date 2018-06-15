@@ -1,38 +1,38 @@
 package pb360.data.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import pb360.model.MessageObject;
 
 @Document(collection = "RestApi")
+public final class RestApi implements Serializable {
 
-public final class RestApi {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	private String id;
 	private String restId;
-
 	private String restName;
-
 	private String restUrl;
-
 	private MessageObject restStatus;
-
 	private List<String> fileOfRest;
-
 	private String restLocation;
-
 	private Date lastModifying;
-	
-	public RestApi()
-	{
+
+	public RestApi() {
 		super();
 	}
-	
-	public RestApi(String restId, String restName,String restUrl,MessageObject restStatus,List<String> fileOfRest,String restLocation,Date lastModifying)
-	{
+
+	public RestApi(@JsonProperty("restId") String restId, @JsonProperty("restName") String restName,
+			@JsonProperty("restUrl") String restUrl, @JsonProperty("restStatus") MessageObject restStatus,
+			@JsonProperty("fileOfRest") List<String> fileOfRest, @JsonProperty("restLocation") String restLocation,
+			@JsonProperty("lastModifying") Date lastModifying) {
 		this.restId = restId;
 		this.restName = restName;
 		this.restUrl = restUrl;

@@ -1,17 +1,27 @@
 package pb360.data.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "MessageObject")
-public final class MessageObject {
+public final class MessageObject implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	private String id;
-
 	private String type;
+	private String data;
+	private Date datetime;
+
+	public MessageObject(String type, String data, Date datetime) {
+		this.type = type;
+		this.data = data;
+		this.datetime = datetime;
+	}
 
 	public String getId() {
 		return id;
@@ -43,16 +53,6 @@ public final class MessageObject {
 
 	public void setDatetime(Date datetime) {
 		this.datetime = datetime;
-	}
-
-	private String data;
-	private Date datetime;
-
-	public MessageObject(String type, String data, Date datetime) {
-		this.type = type;
-		this.data = data;
-		this.datetime = datetime;
-
 	}
 
 }

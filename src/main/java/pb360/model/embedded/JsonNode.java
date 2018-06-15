@@ -5,36 +5,24 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JsonNode {
+
 	private String packages;
-	private List<AnnotationInside> classAnotation;
+	private List<AnnotationData> classAnotation;
 	private String classHeader;
-	private List<Methods> Method;
-	private String name;
-
-	public JsonNode (@JsonProperty("package") String packages,
-			@JsonProperty("classAnotation") List<AnnotationInside> classAnotation,
-			@JsonProperty("classHeader") String classHeader,
-			@JsonProperty("methods") List<Methods> Method) {
-		
-		this.packages = packages;
-		this.classAnotation = classAnotation;
-		this.classHeader = classHeader;
-		this.Method = Method;
-
-	}
-
-	public List<Methods> getMethod() {
-		return Method;
-	}
-
-	public void setMethod(List<Methods> Methods) {
-		Method = Methods;
-	}
+	private List<MethodData> methods;
 
 	public JsonNode() {
 		super();
 	}
 
+	public JsonNode(@JsonProperty("package") String packages,
+			@JsonProperty("classAnotation") List<AnnotationData> classAnotation,
+			@JsonProperty("classHeader") String classHeader, @JsonProperty("methods") List<MethodData> methods) {
+		this.packages = packages;
+		this.classAnotation = classAnotation;
+		this.classHeader = classHeader;
+		this.methods = methods;
+	}
 
 	public String getPackages() {
 		return packages;
@@ -44,11 +32,11 @@ public class JsonNode {
 		this.packages = packages;
 	}
 
-	public List<AnnotationInside> getclassAnotation() {
+	public List<AnnotationData> getClassAnotation() {
 		return classAnotation;
 	}
 
-	public void setclassAnotation(List<AnnotationInside> classAnotation) {
+	public void setClassAnotation(List<AnnotationData> classAnotation) {
 		this.classAnotation = classAnotation;
 	}
 
@@ -58,6 +46,14 @@ public class JsonNode {
 
 	public void setClassHeader(String classHeader) {
 		this.classHeader = classHeader;
+	}
+
+	public List<MethodData> getMethods() {
+		return methods;
+	}
+
+	public void setMethods(List<MethodData> methods) {
+		this.methods = methods;
 	}
 
 }
