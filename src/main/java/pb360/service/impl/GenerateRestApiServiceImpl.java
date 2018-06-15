@@ -120,16 +120,21 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	public JsonNode readModel(JSONObject jsonObject) {
 		JsonNode jsonNode = new JsonNode();
+		
+		List<AnnotationData> listAnnotationData = new ArrayList<AnnotationData>();
 		JSONArray modelArray = (JSONArray) jsonObject.get("Model");
 		for (int index = 0; index < modelArray.size(); index++) {
 			JSONObject object = (JSONObject) modelArray.get(index);
 			String packageName = (String) object.get("package");
 			String classHeader = (String) object.get("classHeader");
+			
+			
 			jsonNode.setPackages(packageName);
 			jsonNode.setClassHeader(classHeader);
 
 			AnnotationData annotationData = new AnnotationData();
 			List<String> annotationContentList = new ArrayList<>();
+			
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
 			for (int annoIndex = 0; annoIndex < classAnotation.size(); annoIndex++) {
 				JSONObject objectClass = (JSONObject) classAnotation.get(annoIndex);
@@ -144,87 +149,120 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			annotationData.setAnnotationStarts(SEPARATOR_BLANK);
 			annotationData.setAnnotationContent(annotationContentList);
 			annotationData.setAnnotationEnds(SEPARATOR_BLANK);
+			
+			listAnnotationData.add(annotationData);
 		}
-
+		jsonNode.setClassAnotation(listAnnotationData);
 		return jsonNode;
 	}
 
 	public JsonNode readValidator(JSONObject jsonObject) {
 		// Validator
-		JsonNode JsonNode = new JsonNode();
+		JsonNode jsonNode = new JsonNode();
+		List<AnnotationData> listAnnotationData = new ArrayList<AnnotationData>();
 		JSONArray validatorArray = (JSONArray) jsonObject.get("Validator");
 		for (int i = 0; i < validatorArray.size(); i++) {
 			JSONObject object = (JSONObject) validatorArray.get(i);
 			String packageName = (String) object.get("package");
 			String classHeader = (String) object.get("classHeader");
-			JsonNode.setPackages(packageName);
-			JsonNode.setClassHeader(classHeader);
+			jsonNode.setPackages(packageName);
+			jsonNode.setClassHeader(classHeader);
+			
+			AnnotationData annotationData = new AnnotationData();
+			List<String> annotationContentList = new ArrayList<>();
 
 			// loop classAnotationArray
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
-			for (int a = 0; a < classAnotation.size(); a++) {
-				JSONObject objectClass = (JSONObject) classAnotation.get(a);
+			for (int annoIndex = 0; annoIndex < classAnotation.size(); annoIndex++) {
+				JSONObject objectClass = (JSONObject) classAnotation.get(annoIndex);
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
-				String annotationContent = (String) annotation.get("annotationContent");
 
-				System.out.println("\n" + annotationContent);
+				String annotationContent = (String) annotation.get("annotationContent");
+				if (annotationContent != null && !annotationContent.trim().isEmpty()) {
+					annotationContentList.add(annotationContent);
+				}
 			}
+			annotationData.setAnnotationStarts(SEPARATOR_BLANK);
+			annotationData.setAnnotationContent(annotationContentList);
+			annotationData.setAnnotationEnds(SEPARATOR_BLANK);
+			
+			listAnnotationData.add(annotationData);
 
 		}
-
-		return JsonNode;
+		jsonNode.setClassAnotation(listAnnotationData);
+		return jsonNode;
 	}
 
 	public JsonNode readOption(JSONObject jsonObject) {
 		// Options
-		JsonNode JsonNode = new JsonNode();
+		JsonNode jsonNode = new JsonNode();
+		List<AnnotationData> listAnnotationData = new ArrayList<AnnotationData>();
 		JSONArray optionsArray = (JSONArray) jsonObject.get("Options");
 		for (int i = 0; i < optionsArray.size(); i++) {
 			JSONObject object = (JSONObject) optionsArray.get(i);
 			String packageName = (String) object.get("package");
 			String classHeader = (String) object.get("classHeader");
-			JsonNode.setPackages(packageName);
-			JsonNode.setClassHeader(classHeader);
+			jsonNode.setPackages(packageName);
+			jsonNode.setClassHeader(classHeader);
+			
+			AnnotationData annotationData = new AnnotationData();
+			List<String> annotationContentList = new ArrayList<>();
 
 			// loop classAnotationArray
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
-			for (int a = 0; a < classAnotation.size(); a++) {
-				JSONObject objectClass = (JSONObject) classAnotation.get(a);
+			for (int annoIndex = 0; annoIndex < classAnotation.size(); annoIndex++) {
+				JSONObject objectClass = (JSONObject) classAnotation.get(annoIndex);
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
-				String annotationContent = (String) annotation.get("annotationContent");
-			}
 
-			// JSONArray methods = (JSONArray) object.get("methods");
-			// for (int b = 0; b < methods.size(); b++) {
-			// JSONObject objectClass = (JSONObject) methods.get(b);
-			// JSONObject method = (JSONObject) objectClass.get("method");
-			// String headerContent = (String) method.get("header").toString();
-			//
-			// }
+				String annotationContent = (String) annotation.get("annotationContent");
+				if (annotationContent != null && !annotationContent.trim().isEmpty()) {
+					annotationContentList.add(annotationContent);
+				}
+			}
+			annotationData.setAnnotationStarts(SEPARATOR_BLANK);
+			annotationData.setAnnotationContent(annotationContentList);
+			annotationData.setAnnotationEnds(SEPARATOR_BLANK);
+			
+			listAnnotationData.add(annotationData);
 
 		}
-
-		return JsonNode;
+		jsonNode.setClassAnotation(listAnnotationData);
+		return jsonNode;
 	}
 
 	public JsonNode readService(JSONObject jsonObject) {
 		// Service
-		JsonNode JsonNode = new JsonNode();
+		JsonNode jsonNode = new JsonNode();
+		
+		List<AnnotationData> listAnnotationData = new ArrayList<AnnotationData>();
 		JSONArray serviceArray = (JSONArray) jsonObject.get("Service");
 		for (int i = 0; i < serviceArray.size(); i++) {
 			JSONObject object = (JSONObject) serviceArray.get(i);
 			String packageName = (String) object.get("package");
 			String classHeader = (String) object.get("classHeader");
-			JsonNode.setPackages(packageName);
-			JsonNode.setClassHeader(classHeader);
+			jsonNode.setPackages(packageName);
+			jsonNode.setClassHeader(classHeader);
+			
+			AnnotationData annotationData = new AnnotationData();
+			List<String> annotationContentList = new ArrayList<>();
 
 			// loop classAnotationArray
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
-			for (int a = 0; a < classAnotation.size(); a++) {
-				JSONObject objectClass = (JSONObject) classAnotation.get(a);
+			for (int annoIndex = 0; annoIndex < classAnotation.size(); annoIndex++) {
+				JSONObject objectClass = (JSONObject) classAnotation.get(annoIndex);
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
+
 				String annotationContent = (String) annotation.get("annotationContent");
+				if (annotationContent != null && !annotationContent.trim().isEmpty()) {
+					annotationContentList.add(annotationContent);
+				}
 			}
+			
+			annotationData.setAnnotationStarts(SEPARATOR_BLANK);
+			annotationData.setAnnotationContent(annotationContentList);
+			annotationData.setAnnotationEnds(SEPARATOR_BLANK);
+			
+			listAnnotationData.add(annotationData);
 
 			JSONArray methods = (JSONArray) object.get("methods");
 			for (int b = 0; b < methods.size(); b++) {
@@ -234,82 +272,101 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			}
 
 		}
-
-		return JsonNode;
+		jsonNode.setClassAnotation(listAnnotationData);
+		return jsonNode;
 	}
 
 	public JsonNode readController(JSONObject jsonObject) {
 		// Controller
-		JsonNode JsonNode = new JsonNode();
+		JsonNode jsonNode = new JsonNode();
+		List<AnnotationData> listAnnotationData = new ArrayList<AnnotationData>();
+
 		JSONArray controllerArray = (JSONArray) jsonObject.get("Controller");
 		for (int i = 0; i < controllerArray.size(); i++) {
 			JSONObject object = (JSONObject) controllerArray.get(i);
 			String packageName = (String) object.get("package");
 			String classHeader = (String) object.get("classHeader");
-			JsonNode.setPackages(packageName);
-			JsonNode.setClassHeader(classHeader);
+			jsonNode.setPackages(packageName);
+			jsonNode.setClassHeader(classHeader);
+			
+			AnnotationData annotationData = new AnnotationData();
+			List<String> annotationContentList = new ArrayList<>();
+
 
 			// loop classAnotationArray
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
-			for (int a = 0; a < classAnotation.size(); a++) {
-				JSONObject objectClass = (JSONObject) classAnotation.get(a);
+			for (int annoIndex = 0; annoIndex < classAnotation.size(); annoIndex++) {
+				JSONObject objectClass = (JSONObject) classAnotation.get(annoIndex);
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
-				String annotationContent = (String) annotation.get("annotationContent");
-			}
-			List<String> line = new ArrayList();
-			JSONArray methods = (JSONArray) object.get("methods");
-			for (int b = 0; b < methods.size(); b++) {
-				JSONObject objectClass = (JSONObject) methods.get(b);
-				JSONObject method = (JSONObject) objectClass.get("method");
-				String headerContent = (String) method.get("header");
-				JSONArray body = (JSONArray) object.get("body");
 
-				for (int c = 0; c < body.size(); c++) {
-					JSONObject lineObject = (JSONObject) body.get(c);
-					String LINE = (String) lineObject.get("line");
-					line.add(LINE);
+				String annotationContent = (String) annotation.get("annotationContent");
+				if (annotationContent != null && !annotationContent.trim().isEmpty()) {
+					annotationContentList.add(annotationContent);
 				}
 			}
-
+			
+			annotationData.setAnnotationStarts(SEPARATOR_BLANK);
+			annotationData.setAnnotationContent(annotationContentList);
+			annotationData.setAnnotationEnds(SEPARATOR_BLANK);
+			
+			listAnnotationData.add(annotationData);
 		}
-		return JsonNode;
+		
+		jsonNode.setClassAnotation(listAnnotationData);
+		return jsonNode;
 	}
 
 	public JsonNode readJUnitTest(JSONObject jsonObject) {
 		// JUnitTest
-		JsonNode JsonNode = new JsonNode();
+		JsonNode jsonNode = new JsonNode();
+		List<AnnotationData> listAnnotationData = new ArrayList<AnnotationData>();
 		JSONArray jUnitTestArray = (JSONArray) jsonObject.get("JUnitTest");
 		for (int i = 0; i < jUnitTestArray.size(); i++) {
 			JSONObject object = (JSONObject) jUnitTestArray.get(i);
 			String packageName = (String) object.get("package");
 			String classHeader = (String) object.get("classHeader");
-			JsonNode.setPackages(packageName);
-			JsonNode.setClassHeader(classHeader);
+			jsonNode.setPackages(packageName);
+			jsonNode.setClassHeader(classHeader);
+			
+			AnnotationData annotationData = new AnnotationData();
+			List<String> annotationContentList = new ArrayList<>();
 
 			// loop classAnotationArray
 			JSONArray classAnotation = (JSONArray) object.get("classAnotation");
-			for (int a = 0; a < classAnotation.size(); a++) {
-				JSONObject objectClass = (JSONObject) classAnotation.get(a);
+			for (int annoIndex = 0; annoIndex < classAnotation.size(); annoIndex++) {
+				JSONObject objectClass = (JSONObject) classAnotation.get(annoIndex);
 				JSONObject annotation = (JSONObject) objectClass.get("annotation");
-				String annotationContent = (String) annotation.get("annotationContent");
-			}
-			List<String> line = new ArrayList();
-			JSONArray methods = (JSONArray) object.get("methods");
-			for (int b = 0; b < methods.size(); b++) {
-				JSONObject objectClass = (JSONObject) methods.get(b);
-				JSONObject method = (JSONObject) objectClass.get("method");
-				String headerContent = (String) method.get("header");
-				JSONArray body = (JSONArray) object.get("body");
 
-				for (int c = 0; c < body.size(); c++) {
-					JSONObject lineObject = (JSONObject) body.get(c);
-					String LINE = (String) lineObject.get("line");
-					line.add(LINE);
+				String annotationContent = (String) annotation.get("annotationContent");
+				if (annotationContent != null && !annotationContent.trim().isEmpty()) {
+					annotationContentList.add(annotationContent);
 				}
 			}
+			
+			annotationData.setAnnotationStarts(SEPARATOR_BLANK);
+			annotationData.setAnnotationContent(annotationContentList);
+			annotationData.setAnnotationEnds(SEPARATOR_BLANK);
+			
+			listAnnotationData.add(annotationData);
+			
+			
+//			List<String> line = new ArrayList();
+//			JSONArray methods = (JSONArray) object.get("methods");
+//			for (int b = 0; b < methods.size(); b++) {
+//				JSONObject objectClass = (JSONObject) methods.get(b);
+//				JSONObject method = (JSONObject) objectClass.get("method");
+//				String headerContent = (String) method.get("header");
+//				JSONArray body = (JSONArray) object.get("body");
+//
+//				for (int c = 0; c < body.size(); c++) {
+//					JSONObject lineObject = (JSONObject) body.get(c);
+//					String LINE = (String) lineObject.get("line");
+//					line.add(LINE);
+//				}
+//			}
 
 		}
-		return JsonNode;
+		return jsonNode;
 	}
 
 	public void writeToJavaFile(String stringData, String fileName) {
