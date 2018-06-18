@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MethodData {
 	private String header;
 	private List<String> body;
-//	private List<String> String;
+
 	public String getHeader() {
 		return header;
 	}
