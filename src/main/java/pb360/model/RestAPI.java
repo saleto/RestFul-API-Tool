@@ -1,5 +1,6 @@
 package pb360.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(Include.NON_DEFAULT)
-public class RestAPI {
+public class RestAPI implements Serializable{
 
 	private String restId;
 
