@@ -11,12 +11,15 @@ public class MethodData {
 	public String getHeader() {
 		return header;
 	}
+
 	public void setHeader(String header) {
 		this.header = header;
 	}
+
 	public List<String> getBody() {
 		return body;
 	}
+
 	public void setBody(List<String> body) {
 		this.body = body;
 	}
@@ -25,11 +28,10 @@ public class MethodData {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public MethodData(@JsonProperty("header") String header,@JsonProperty("body") List<String> body) {
+
+	public MethodData(@JsonProperty("header") String header, @JsonProperty("body") List<String> body) {
 		this.header = header;
 		this.body = body;
 	}
-	
-	
 
 }
