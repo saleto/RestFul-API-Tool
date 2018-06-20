@@ -15,9 +15,9 @@ public class RestAPI implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String restId;
+	private String restId; // password
 
-	private String restName;
+	private String restName; // username
 
 	private String restUrl;
 
