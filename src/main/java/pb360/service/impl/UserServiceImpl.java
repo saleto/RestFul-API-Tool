@@ -37,4 +37,25 @@ public class UserServiceImpl implements UserService {
 		return messageObject;
 	}
 
+	@Override
+	public MessageObject login(String username, String password) {
+		MessageObject messageObject = new MessageObject();
+		messageObject.setData("Login User");
+		messageObject.setType("Get information user");
+		if (userRepository.findOneByUsernameAndPassword(username, password) == null) {
+			UserEntity user = new UserEntity();
+			if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
+				messageObject.setData("Login User successful: " + username);
+			} else if (username.equals(user.getUsername()) && !password.equals(user.getPassword())) {
+				messageObject.setData("Invalid Password!");
+			} else if (!username.equals(user.getUsername())) {
+				messageObject.setData("Invalid Username!");
+			}
+		}
+		messageObject.setDatetime(new Date());
+
+		return messageObject;
+
+	}
+
 }

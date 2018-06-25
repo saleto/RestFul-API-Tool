@@ -7,6 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,5 +39,15 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String fetchUser() {
 		return "Can access";
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{username}/{password}")
+	public HttpEntity<MessageObject> loginUser(@Valid @PathVariable String username, @PathVariable String password) {
+		MessageObject messageObject = userService.login(username, password);
+		if (messageObject != null) {
+			return new ResponseEntity<MessageObject>(messageObject, HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
