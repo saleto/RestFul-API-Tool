@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	private static final String json_link = "D:\\restapi\\JSON_Sample.json";
 	private static final String SEPARATOR_BLANK = "";
 	private static final String userInputName ="defaultFunc";
+	private static int _id = 0;
 
 	@Override
 	public MessageObject getRestApiData(String restId) {
@@ -54,12 +56,17 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	@Override
 	public MessageObject createRestApiData(RestAPI restApi) {
 		List<String> fileOfRest = new ArrayList<>();
+		
+		restApi.setRestId(_id+"");
+		_id = _id ++;
 		MessageObject post = new MessageObject();
 		post.setData("generate restapi files successful");
 		post.setType("POST");
 		post.setDatetime(getCurrentDateTime().getDatetime());
 		String filename = restApi.getRestName();
 		String directory = restApi.getRestUrl();
+		
+		
 
 		readJson(json_link, filename);
 		fileOfRest.add(filename + "Model");
@@ -68,9 +75,17 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		fileOfRest.add(filename + "JUnitTest");
 		fileOfRest.add(filename + "Controller");
 		fileOfRest.add(filename + "Common");
-
+		
 		restApi.setFileOfRest(fileOfRest);
-
+		restApi.setRestName(filename);
+		restApi.getRestUrl();
+		restApi.setRestLocation("pb360.test.");
+		
+		post.setData("Complete");
+		post.setType("Generate completed");
+		restApi.setRestStatus(post);
+		
+	    
 		return post;
 	}
 
@@ -140,7 +155,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	}
 
 	private void writeToFinalFile(JsonNode jsonNode, String name, String controllerName) {
-		jsonNode.getPackages();
+	
+		
 		jsonNode.getClassAnotation();
 		jsonNode.getClassHeader();
 		jsonNode.getMethods();
@@ -150,13 +166,18 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		listAnnotationData = jsonNode.getClassAnotation();
 
 		String input = "";
-		input = jsonNode.getPackages();
 		StringBuilder result = new StringBuilder();
-		result.append(input);
-		result.append(";\n");
-		result.append("import java.util.*;");
+		if(jsonNode.getPackages()!= null)
+		{
+			input = jsonNode.getPackages();
+			
+			result.append(input);
+			result.append(";\n");
+		}
+		
+		result.append("import java.util.*;\n");
 		result.append("import org.eclipse.jetty.http.HttpStatus;\n");
-		result.append("import org.springframework.hateoas.Link;");
+		result.append("import org.springframework.hateoas.Link;\n");
 		result.append("import org.springframework.hateoas.Resource;\n");
 		result.append("import org.springframework.http.ResponseEntity;\n");
 		result.append("import org.springframework.web.bind.annotation.RequestMapping;\n");
@@ -197,8 +218,12 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 		
 		result.append("\n");
-		result.append(jsonNode.getClassHeader());
-		result.append("{}\n");
+		if(jsonNode.getClassHeader()!= null)
+		{
+			result.append(jsonNode.getClassHeader());
+			result.append("{}\n");
+		}
+		
 		if (jsonNode.getMethods() != null) {
 			listMethodData = jsonNode.getMethods();
 			for (int i = 0; i < listMethodData.size(); i++) {
