@@ -20,40 +20,45 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public MessageObject register(UserModel userModel) {
 		MessageObject messageObject = new MessageObject();
-		messageObject.setType("CreateUser");
+		messageObject.setType("Create User");
 		messageObject.setData("Cannot create User");
 
 		if (userRepository.findOneByPassword(userModel.getUsername(), userModel.getPassword()) == null) {
 			UserEntity user = new UserEntity();
-			user.setUsername(userModel.getUsername());
-			user.setPassword(userModel.getPassword());
-			userRepository.save(user);
-
-			messageObject.setData("Create User successful: " + userModel.getUsername());
+			if (userModel.getPassword().length() < 8) {
+				messageObject.setData("Password must be greater than or equal to 8 characters!");
+			} else if (userModel.getUsername() == null || userModel.getPassword() == null) {
+				messageObject.setData("Please! Enter your username and password!");
+			} else {
+				user.setUsername(userModel.getUsername());
+				user.setPassword(userModel.getPassword());
+				userRepository.save(user);
+				messageObject.setData("Create User successful: " + userModel.getUsername() + "\n"
+						+ "Please! Login with your account has just registered.");
+			
+			}
 		}
-
 		messageObject.setDatetime(new Date());
-
 		return messageObject;
 	}
 
 	@Override
-	public MessageObject login(String username, String password) {
+	public MessageObject login(String username, UserModel userModel) {
 		MessageObject messageObject = new MessageObject();
-		messageObject.setData("Login User");
-		messageObject.setType("Get information user");
-		if (userRepository.findOneByUsernameAndPassword(username, password) == null) {
-			UserEntity user = new UserEntity();
-			if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
+		UserEntity user = new UserEntity();
+		UserEntity userEntity = userRepository.findOneByUsername(username);
+		if (userEntity == null) {
+			if (username.equalsIgnoreCase(user.getUsername()) && userModel.getPassword().equals(user.getPassword())) {
+				messageObject.setType("Success!");
 				messageObject.setData("Login User successful: " + username);
-			} else if (username.equals(user.getUsername()) && !password.equals(user.getPassword())) {
+			} else if (username.equalsIgnoreCase(user.getUsername())
+					&& !(userModel.getPassword().equals(user.getPassword()))) {
 				messageObject.setData("Invalid Password!");
-			} else if (!username.equals(user.getUsername())) {
+			} else if (!(username.equalsIgnoreCase(user.getUsername()))) {
 				messageObject.setData("Invalid Username!");
 			}
 		}
 		messageObject.setDatetime(new Date());
-
 		return messageObject;
 
 	}

@@ -21,8 +21,7 @@ public class UserEntity implements Serializable {
 		super();
 	}
 
-	public UserEntity(@JsonProperty("id") String id, @JsonProperty("username") String username,
-			@JsonProperty("password") String password) {
+	public UserEntity(String id, String username, String password) {
 		super();
 		this.id = id;
 		this.username = username;
