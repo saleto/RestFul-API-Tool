@@ -29,6 +29,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	private static final String SEPARATOR_BLANK = "";
 	private static final String userInputName ="defaultFunc";
 	private static int _id = 0;
+	private static String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
 
 	@Override
 	public MessageObject getRestApiData(String restId) {
@@ -68,7 +69,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		
 		
 
-		readJson(json_link, filename);
+		readJson(json_link, filename, directory);
 		fileOfRest.add(filename + "Model");
 		fileOfRest.add(filename + "Option");
 		fileOfRest.add(filename + "Service");
@@ -116,7 +117,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		return date;
 	}
 
-	private void readJson(String link, String filename) {
+	private void readJson(String link, String filename, String directory) {
 		JsonDataModel jsonDataModel = new JsonDataModel();
 		List<JsonNode> jsonNodeList = new ArrayList<JsonNode>();
 
@@ -127,6 +128,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			JSONObject jsonObject = (JSONObject) obj;
 
 			jsonNodeList.add(readModel(jsonObject));
+			jsonNodeList.add(readValidator(jsonObject));
 			jsonNodeList.add(readOption(jsonObject));
 			jsonNodeList.add(readService(jsonObject));
 			jsonNodeList.add(readJUnitTest(jsonObject));
@@ -138,12 +140,13 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			
 			
 
-			writeToFinalFile(jsonNodeList.get(0), filename+"Model", filename+"Model");
-			writeToFinalFile(jsonNodeList.get(1), filename+"Option", filename+"Option");
-			writeToFinalFile(jsonNodeList.get(2), filename+"Service", filename+"Service");
-			writeToFinalFile(jsonNodeList.get(3), filename+"JUnitTest", filename+"JUnitTest");
-			writeToFinalFile(jsonNodeList.get(4), filename+"Controller", filename+"Controller");
-			writeToFinalFile(jsonNodeList.get(5), filename+"Common", filename+"Common");
+			writeToFinalFile(jsonNodeList.get(0), filename+"Model", filename+"Model", directory, 0);
+			writeToFinalFile(jsonNodeList.get(1), filename+"Validator", filename+"Validator",directory, 1);
+			writeToFinalFile(jsonNodeList.get(2), filename+"Option", filename+"Option", directory, 2);
+			writeToFinalFile(jsonNodeList.get(3), filename+"Service", filename+"Service", directory, 3);
+			writeToFinalFile(jsonNodeList.get(4), filename+"JUnitTest", filename+"JUnitTest", directory, 4);
+			writeToFinalFile(jsonNodeList.get(5), filename+"Controller", filename+"Controller", directory, 5);
+			writeToFinalFile(jsonNodeList.get(6), filename+"Common", filename+"Common", directory, 6);
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -154,16 +157,18 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		}
 	}
 
-	private void writeToFinalFile(JsonNode jsonNode, String name, String controllerName) {
+	private void writeToFinalFile(JsonNode jsonNode, String name, String controllerName, String directory, int fileIndex) {
 	
 		
-		jsonNode.getClassAnotation();
-		jsonNode.getClassHeader();
-		jsonNode.getMethods();
+//		jsonNode.getClassAnotation();
+//		jsonNode.getClassHeader();
+//		jsonNode.getMethods();
 
 		List<AnnotationData> listAnnotationData = new ArrayList<>();
 		List<MethodData> listMethodData = new ArrayList<>();
+		
 		listAnnotationData = jsonNode.getClassAnotation();
+		
 
 		String input = "";
 		StringBuilder result = new StringBuilder();
@@ -182,6 +187,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		result.append("import org.springframework.http.ResponseEntity;\n");
 		result.append("import org.springframework.web.bind.annotation.RequestMapping;\n");
 		result.append("import org.springframework.web.bind.annotation.RestController;\n");
+		result.append("import org.springframework.ui.Model;\n");
+		result.append("import pb360.*;");
 		
 		
 		
@@ -200,10 +207,13 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 				if(listAnnotationData.get(i).getAnnotationContent().get(o) == null)
 				{
 					result.append("");
+					
 				}
 				else
 				{
-					result.append(listAnnotationData.get(i).getAnnotationContent().get(o));
+					input = listAnnotationData.get(i).getAnnotationContent().get(o);
+					input = input.replace("{1}", "\""+directory+"\"");
+					result.append(input);				
 					result.append("\n");
 				}
 				
@@ -220,15 +230,21 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		result.append("\n");
 		if(jsonNode.getClassHeader()!= null)
 		{
-			result.append(jsonNode.getClassHeader());
-			result.append("{}\n");
+			input = jsonNode.getClassHeader();
+			input = input.replace("{1}", controllerName);
+			result.append(input);
+		
+			result.append("{\n");
 		}
 		
 		if (jsonNode.getMethods() != null) {
 			listMethodData = jsonNode.getMethods();
 			for (int i = 0; i < listMethodData.size(); i++) {
+				if (listMethodData.get(i).getHeader() != null)
+				{
 				result.append(listMethodData.get(i).getHeader());
 				result.append("\n");
+				}
 				if (listMethodData.get(i).getBody() != null) {
 					for (int k = 0; k < listMethodData.get(i).getBody().size(); k++) {
 						result.append(listMethodData.get(i).getBody().get(k));
@@ -244,13 +260,41 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		}
 		
 		
-		
+		result.append("\n}");
 		input = result.toString();
-//		input = input.replace("null", "");
+	
 		
-		input = input.replace("{1}", controllerName);
-		input = input.replace("ControllerName", controllerName);
-		writeToJavaFile(input, name);
+//		input = input.replace("ControllerName", controllerName);
+//		if(fileIndex == 0)
+//		{
+//			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\model");
+//		}
+//		else if(fileIndex == 1)
+//		{
+//			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\option");
+//		}
+//		else if(fileIndex == 2)
+//		{
+//			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\service");
+//		}
+//		else if(fileIndex == 3)
+//		{
+//			writeToJavaFile(input, name, "");
+//		}
+//		else if(fileIndex ==4)
+//		{
+//			writeToJavaFile(input, name, "");
+//		}
+//		else if(fileIndex == 5)
+//		{
+//			writeToJavaFile(input, name, "");
+//		}
+//		else
+//		{
+//			System.out.println("something WRONG");
+//		}
+		
+		writeToJavaFile(input, name, defaultLink);
 
 	}
 
@@ -299,6 +343,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		List<String> annotationContentList = new ArrayList<>();
 		MethodData methodData = new MethodData();
 		List<MethodData> listMethodData = new ArrayList<>();
+		List<String> bodyList = new ArrayList<>();
 		JSONArray validatorArray = (JSONArray) jsonObject.get("Validator");
 		for (int i = 0; i < validatorArray.size(); i++) {
 			JSONObject object = (JSONObject) validatorArray.get(i);
@@ -324,19 +369,47 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 			listAnnotationData.add(annotationData);
 
-			JSONArray classMethods = (JSONArray) object.get("methods");
-			for (int methodIndex = 0; methodIndex < classMethods.size(); methodIndex++) {
-				JSONObject objectClass = (JSONObject) classMethods.get(methodIndex);
-				JSONObject method = (JSONObject) objectClass.get("method");
+			if (object.get("methods") != null) {
+				JSONArray classMethods = (JSONArray) object.get("methods");
+				for (int methodIndex = 0; methodIndex < classMethods.size(); methodIndex++) {
+					JSONObject objectClass = (JSONObject) classMethods.get(methodIndex);
 
-				String headerContent = (String) method.get("header");
-				if (headerContent != null && !headerContent.trim().isEmpty()) {
-					methodData.setHeader(headerContent);
+					JSONArray method = (JSONArray) objectClass.get("method");
+
+					for (int index = 0; index < method.size(); index++) {
+						JSONObject tempObject = (JSONObject) method.get(index);
+						String headerContent = (String) tempObject.get("header");
+					
+//							methodData.setHeader(headerContent);
+							bodyList.add(headerContent + "{" );
+
+
+						if(tempObject.get("body") != null)
+						{
+						JSONArray bodyArray = (JSONArray) tempObject.get("body");
+						for (int bodyIndex = 0; bodyIndex < bodyArray.size(); bodyIndex++) {
+							JSONObject bodyContent = (JSONObject) bodyArray.get(bodyIndex);
+
+							String singeLine = (String) bodyContent.get("line");
+
+							bodyList.add(singeLine+";");
+
+						}
+						}
+					
+					}
+					if(methodIndex < classMethods.size())
+					{
+						bodyList.add("}");
+					}
+					methodData.setBody(bodyList);
 				}
-			}
+//				methodData.setBody(bodyList);
+				listMethodData.add(methodData);
 
-			listMethodData.add(methodData);
+			}
 		}
+
 		jsonNode.setClassAnotation(listAnnotationData);
 		jsonNode.setMethods(listMethodData);
 		return jsonNode;
@@ -348,6 +421,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		List<AnnotationData> listAnnotationData = new ArrayList<AnnotationData>();
 		MethodData methodData = new MethodData();
 		List<MethodData> listMethodData = new ArrayList<>();
+	
+		List<String> bodyList = new ArrayList<>();
 
 		JSONArray optionsArray = (JSONArray) jsonObject.get("Options");
 		for (int i = 0; i < optionsArray.size(); i++) {
@@ -377,22 +452,45 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 			listAnnotationData.add(annotationData);
 
-			JSONArray classMethods = (JSONArray) object.get("methods");
-			for (int methodIndex = 0; methodIndex < classMethods.size(); methodIndex++) {
-				JSONObject objectClass = (JSONObject) classMethods.get(methodIndex);
+			if (object.get("methods") != null) {
+				JSONArray classMethods = (JSONArray) object.get("methods");
+				for (int methodIndex = 0; methodIndex < classMethods.size(); methodIndex++) {
+					JSONObject objectClass = (JSONObject) classMethods.get(methodIndex);
 
-				JSONArray method = (JSONArray) objectClass.get("method");
-				for (int index = 0; index < method.size(); index++) {
-					String headerContent = method.get(index).toString();
-					if (headerContent != null && !headerContent.trim().isEmpty()) {
-						methodData.setHeader(headerContent);
+					JSONArray method = (JSONArray) objectClass.get("method");
+
+					for (int index = 0; index < method.size(); index++) {
+						JSONObject tempObject = (JSONObject) method.get(index);
+						String headerContent = (String) tempObject.get("header");
+					
+//							methodData.setHeader(headerContent);
+							bodyList.add(headerContent + "{" );
+
+
+						if(tempObject.get("body") != null)
+						{
+						JSONArray bodyArray = (JSONArray) tempObject.get("body");
+						for (int bodyIndex = 0; bodyIndex < bodyArray.size(); bodyIndex++) {
+							JSONObject bodyContent = (JSONObject) bodyArray.get(bodyIndex);
+
+							String singeLine = (String) bodyContent.get("line");
+
+							bodyList.add(singeLine+";");
+
+						}
+						}
+					
 					}
+					if(methodIndex < classMethods.size())
+					{
+						bodyList.add("}");
+					}
+					methodData.setBody(bodyList);
 				}
+//				methodData.setBody(bodyList);
+				listMethodData.add(methodData);
 
-			}
-
-			listMethodData.add(methodData);
-
+		}
 		}
 		jsonNode.setClassAnotation(listAnnotationData);
 		jsonNode.setMethods(listMethodData);
@@ -404,6 +502,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		JsonNode jsonNode = new JsonNode();
 		MethodData methodData = new MethodData();
 		List<MethodData> listMethodData = new ArrayList<>();
+		
+		List<String> bodyList = new ArrayList<>();
 
 		List<AnnotationData> listAnnotationData = new ArrayList<AnnotationData>();
 		JSONArray serviceArray = (JSONArray) jsonObject.get("Service");
@@ -437,24 +537,51 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 				listAnnotationData.add(annotationData);
 			}
 
-			JSONArray classMethods = (JSONArray) object.get("methods");
-			for (int methodIndex = 0; methodIndex < classMethods.size(); methodIndex++) {
-				JSONObject objectClass = (JSONObject) classMethods.get(methodIndex);
+			if (object.get("methods") != null) {
+				JSONArray classMethods = (JSONArray) object.get("methods");
+				for (int methodIndex = 0; methodIndex < classMethods.size(); methodIndex++) {
+					JSONObject objectClass = (JSONObject) classMethods.get(methodIndex);
 
-				JSONArray method = (JSONArray) objectClass.get("method");
-				for (int index = 0; index < method.size(); index++) {
-					String headerContent = method.get(index).toString();
-					if (headerContent != null && !headerContent.trim().isEmpty()) {
-						methodData.setHeader(headerContent);
+					JSONArray method = (JSONArray) objectClass.get("method");
+
+					for (int index = 0; index < method.size(); index++) {
+						JSONObject tempObject = (JSONObject) method.get(index);
+						String headerContent = (String) tempObject.get("header");
+					
+//							methodData.setHeader(headerContent);
+							bodyList.add(headerContent + "{" );
+
+
+							
+						if(tempObject.get("body")!= null)
+						{
+						JSONArray bodyArray = (JSONArray) tempObject.get("body");
+						for (int bodyIndex = 0; bodyIndex < bodyArray.size(); bodyIndex++) {
+							JSONObject bodyContent = (JSONObject) bodyArray.get(bodyIndex);
+
+							String singeLine = (String) bodyContent.get("line");
+
+							bodyList.add(singeLine+";");
+
+						}
+						}
+					
 					}
+					if(methodIndex < classMethods.size())
+					{
+						bodyList.add("}");
+					}
+					methodData.setBody(bodyList);
 				}
+//				methodData.setBody(bodyList);
+				listMethodData.add(methodData);
+
 			}
-
-			listMethodData.add(methodData);
-
 		}
+
 		jsonNode.setClassAnotation(listAnnotationData);
 		jsonNode.setMethods(listMethodData);
+
 		return jsonNode;
 	}
 
@@ -496,8 +623,10 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 					} else {
 
 						JSONArray annotationContent = (JSONArray) annotation.get("annotationContent");
+						
 						for (int Index = 0; Index < annotationContent.size(); Index++) {
 							JSONObject objClass = (JSONObject) annotationContent.get(Index);
+					
 							String a = objClass.get("annotationParam").toString();
 
 							annotationContentList.add(a);
@@ -528,6 +657,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 							bodyList.add(headerContent + "{" );
 
 
+						if(tempObject.get("body") != null)
+						{
 						JSONArray bodyArray = (JSONArray) tempObject.get("body");
 						for (int bodyIndex = 0; bodyIndex < bodyArray.size(); bodyIndex++) {
 							JSONObject bodyContent = (JSONObject) bodyArray.get(bodyIndex);
@@ -536,6 +667,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 							bodyList.add(singeLine+";");
 
+						}
 						}
 					
 					}
@@ -674,10 +806,11 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		return jsonNode;
 	}
 
-	public void writeToJavaFile(String stringData, String fileName) {
+	public void writeToJavaFile(String stringData, String fileName, String link) {
 		try {
+			String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
 
-			File file = new File("D:/restapi/RestFul-API-Tool/javaData", fileName + ".java");
+			File file = new File(link, fileName + ".java");
 			if (file.exists()) {
 				file.delete();
 			}

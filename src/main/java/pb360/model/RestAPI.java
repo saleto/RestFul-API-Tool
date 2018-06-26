@@ -3,12 +3,20 @@ package pb360.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.hateoas.ResourceSupport;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(Include.NON_DEFAULT)
-public class RestAPI implements Serializable{
+public class RestAPI extends ResourceSupport implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String restId;
 
