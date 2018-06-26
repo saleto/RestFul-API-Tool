@@ -10,14 +10,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_DEFAULT)
 public class RestAPI implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	private String restId; // password
+	private String restId;
 
-	private String restName; // username
+	private String restName;
 
 	private String restUrl;
 
@@ -44,7 +41,6 @@ public class RestAPI implements Serializable {
 		this.fileOfRest = fileOfRest;
 		this.restLocation = restLocation;
 		this.lastModifying = lastModifying;
-
 	}
 
 	public String getRestId() {
