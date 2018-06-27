@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import pb360.model.MessageObject;
 import pb360.model.UserModel;
 import pb360.service.UserService;
-import pb360.service.impl.UserServiceImpl;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -30,10 +31,10 @@ public class UserController {
 	public HttpEntity<MessageObject> createNewUser(@Valid @RequestBody UserModel user) {
 		MessageObject messageObject = userService.register(user);
 		if (messageObject != null) {
+			messageObject.add(linkTo(methodOn(UserController.class).getClass()).withSelfRel());
 			return new ResponseEntity<MessageObject>(messageObject, HttpStatus.OK);
 		}
-
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<MessageObject>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -41,13 +42,14 @@ public class UserController {
 		return "Can access";
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/{username}/{password}")
-	public HttpEntity<MessageObject> loginUser(@Valid @PathVariable String username, @PathVariable String password) {
-		MessageObject messageObject = userService.login(username, password);
-		if (messageObject != null) {
+	@RequestMapping(method = RequestMethod.POST, value = "/{username}")
+	public HttpEntity<MessageObject> loginUser(@PathVariable("username") String username, @RequestBody UserModel user) {
+		MessageObject messageObject = userService.login(username, user);
+		if (messageObject != null ) {
+			messageObject.add(linkTo(methodOn(this.getClass()).getClass()).withRel(username));
 			return new ResponseEntity<MessageObject>(messageObject, HttpStatus.OK);
 		}
 
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<MessageObject>(messageObject, HttpStatus.NO_CONTENT);
 	}
 }

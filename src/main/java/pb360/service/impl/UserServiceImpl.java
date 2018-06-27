@@ -20,40 +20,45 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public MessageObject register(UserModel userModel) {
 		MessageObject messageObject = new MessageObject();
-		messageObject.setType("CreateUser");
-		messageObject.setData("Cannot create User");
-
+		messageObject.setType("Create User");
+		messageObject.setData("Can't create User");
+		messageObject.setDatetime(new Date());
 		if (userRepository.findOneByPassword(userModel.getUsername(), userModel.getPassword()) == null) {
 			UserEntity user = new UserEntity();
-			user.setUsername(userModel.getUsername());
-			user.setPassword(userModel.getPassword());
-			userRepository.save(user);
-
-			messageObject.setData("Create User successful: " + userModel.getUsername());
+			if (userModel.getUsername().equals("") || userModel.getPassword().equals("")) {
+				messageObject.setData("Username and Password must be not blank!");
+			} else if (userModel.getPassword().length() < 8) {
+				messageObject.setData("Password must be greater than or equal to 8 characters!");
+			} else {
+				user.setUsername(userModel.getUsername());
+				user.setPassword(userModel.getPassword());
+				userRepository.save(user);
+				messageObject.setData("Create User successful: " + userModel.getUsername());
+			}
 		}
-
-		messageObject.setDatetime(new Date());
 
 		return messageObject;
 	}
 
 	@Override
-	public MessageObject login(String username, String password) {
+	public MessageObject login(String username, UserModel user) {
 		MessageObject messageObject = new MessageObject();
-		messageObject.setData("Login User");
-		messageObject.setType("Get information user");
-		if (userRepository.findOneByUsernameAndPassword(username, password) == null) {
-			UserEntity user = new UserEntity();
-			if (username.equals(user.getUsername()) && password.equals(user.getPassword())) {
+		messageObject.setType("");
+		UserEntity userEntity = userRepository.findOneByUsername(username);
+		if (userEntity != null) {
+			if (username.equalsIgnoreCase(userEntity.getUsername())
+					&& user.getPassword().equals(userEntity.getPassword())) {
 				messageObject.setData("Login User successful: " + username);
-			} else if (username.equals(user.getUsername()) && !password.equals(user.getPassword())) {
+			} else if (!(username.equals(userEntity.getUsername()))) {
+				messageObject.setData("Invalid Username");
+			} else if (!user.getPassword().equals(userEntity.getPassword())) {
 				messageObject.setData("Invalid Password!");
-			} else if (!username.equals(user.getUsername())) {
-				messageObject.setData("Invalid Username!");
+			} else if (username.equals(userEntity.getUsername())
+					&& !user.getPassword().equals(userEntity.getPassword())) {
+				messageObject.setData("Invalid Password");
 			}
 		}
 		messageObject.setDatetime(new Date());
-
 		return messageObject;
 
 	}
