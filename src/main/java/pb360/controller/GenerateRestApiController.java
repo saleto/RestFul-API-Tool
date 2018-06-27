@@ -1,5 +1,6 @@
 package pb360.controller;
 
+import pb360.data.repository.MessageObjectRepository;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
 
@@ -39,6 +40,7 @@ public class GenerateRestApiController {
 	@Autowired
 	private GenerateRestApiService generateRestApiService;
 	private ValidateRestAPI valiRestApi;
+//	MessageObjectRepository messageObjectRepository;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -51,6 +53,7 @@ public class GenerateRestApiController {
 	@RequestMapping(value = "/{restId}", method = RequestMethod.GET)
 	public HttpEntity<MessageObject> getRestApiDetails(@PathVariable("restId") String restId) {
 		MessageObject messageObj = generateRestApiService.getRestApiData(restId);
+//		messageObjectRepository.findBymessageNumber(restId);
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
 	}
 

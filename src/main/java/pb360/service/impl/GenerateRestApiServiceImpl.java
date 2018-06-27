@@ -1,5 +1,7 @@
 package pb360.service.impl;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,11 +11,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.hibernate.validator.internal.util.privilegedactions.GetMethod;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import pb360.data.entity.RestApi;
+import pb360.data.repository.MessageObjectRepository;
 import pb360.model.JsonDataModel;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
@@ -25,11 +33,15 @@ import pb360.service.GenerateRestApiService;
 @Service
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
 
+	
 	private static final String json_link = "D:\\restapi\\JSON_Sample.json";
 	private static final String SEPARATOR_BLANK = "";
 	private static final String userInputName ="defaultFunc";
-	private static int _id = 0;
+	//// bay gio lam sao tim dk max id boi 1 cau query, minh lam sao
 	private static String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
+	
+	@Autowired
+	private MessageObjectRepository messageObjectRepository;
 
 	@Override
 	public MessageObject getRestApiData(String restId) {
@@ -37,9 +49,22 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		getMessage.setData("Get RestApi data successful: " + restId);
 		getMessage.setType("GET");
 		getMessage.setDatetime(getCurrentDateTime().getDatetime());
-
+//		MessageObject check = new MessageObject();
+//		check = messageObjectRepository.findBymessageNumber(restId);
+//		if(check.getMessageNumber()!= null)
+//		{
+//			getMessage.setType("FOUND");
+//		}
+//		else 
+//		{
+//			getMessage.setType("NOT FOUND");
+//		}
+	
+	
 		return getMessage;
 	}
+	
+
 
 	@Override
 	public List<MessageObject> searchRestApiData() {
@@ -58,8 +83,16 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	public MessageObject createRestApiData(RestAPI restApi) {
 		List<String> fileOfRest = new ArrayList<>();
 		
-		restApi.setRestId(_id+"");
-		_id = _id ++;
+//		restApi.setRestId(String.valueOf(_id));
+//		RestApi = findFirstByOrderByIdDesc();
+//		
+//		_id = _id ++;
+		
+		if(restApi.getRestId() == null)
+		{
+			restApi.setRestId(String.valueOf(0));
+		}
+		// working on this later
 		MessageObject post = new MessageObject();
 		post.setData("generate restapi files successful");
 		post.setType("POST");
@@ -85,8 +118,16 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		post.setData("Complete");
 		post.setType("Generate completed");
 		restApi.setRestStatus(post);
+		RestApi entity = new RestApi();
+		entity.setFileOfRest(restApi.getFileOfRest());
+		entity.setLastModifying(restApi.getLastModifying());
+		entity.setRestId(restApi.getRestId());
+		entity.setRestLocation(restApi.getRestLocation());
+		entity.setRestName(restApi.getRestName());
+		entity.setRestStatus(restApi.getRestStatus());
+		entity.setRestUrl(restApi.getRestUrl());
 		
-	    
+		messageObjectRepository.save(entity);
 		return post;
 	}
 

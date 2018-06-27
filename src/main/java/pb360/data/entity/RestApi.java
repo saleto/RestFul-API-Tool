@@ -29,10 +29,10 @@ public final class RestApi implements Serializable {
 		super();
 	}
 
-	public RestApi(@JsonProperty("restId") String restId, @JsonProperty("restName") String restName,
-			@JsonProperty("restUrl") String restUrl, @JsonProperty("restStatus") MessageObject restStatus,
-			@JsonProperty("fileOfRest") List<String> fileOfRest, @JsonProperty("restLocation") String restLocation,
-			@JsonProperty("lastModifying") Date lastModifying) {
+	public RestApi( String restId,  String restName,
+			 String restUrl,  MessageObject restStatus,
+			 List<String> fileOfRest,  String restLocation,
+			 Date lastModifying) {
 		this.restId = restId;
 		this.restName = restName;
 		this.restUrl = restUrl;
