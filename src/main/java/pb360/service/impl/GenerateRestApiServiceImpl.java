@@ -200,10 +200,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	private void writeToFinalFile(JsonNode jsonNode, String name, String controllerName, String directory, int fileIndex) {
 	
-		
-//		jsonNode.getClassAnotation();
-//		jsonNode.getClassHeader();
-//		jsonNode.getMethods();
+	
 
 		List<AnnotationData> listAnnotationData = new ArrayList<>();
 		List<MethodData> listMethodData = new ArrayList<>();

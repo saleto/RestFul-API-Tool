@@ -15,7 +15,5 @@ public interface GenerateRestApiService  {
 	public MessageObject updateRestApiData(String restId);
 
 	public MessageObject deleteRestApiData(String restId);
-	
-	
 
 }
