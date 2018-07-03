@@ -1,6 +1,7 @@
 package pb360.service.impl;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static com.mongodb.client.model.Filters.eq;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,13 +13,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.validator.internal.util.privilegedactions.GetMethod;
+
+import org.bson.Document;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
+import com.mongodb.MongoClient;
+
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
 
 import pb360.data.entity.RestApi;
 import pb360.data.repository.MessageObjectRepository;
@@ -36,8 +46,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	
 	private static final String json_link = "D:\\restapi\\JSON_Sample.json";
 	private static final String SEPARATOR_BLANK = "";
-	private static final String userInputName ="defaultFunc";
-	//// bay gio lam sao tim dk max id boi 1 cau query, minh lam sao
+	
+
 	private static String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
 	
 	@Autowired
@@ -49,18 +59,19 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		getMessage.setData("Get RestApi data successful: " + restId);
 		getMessage.setType("GET");
 		getMessage.setDatetime(getCurrentDateTime().getDatetime());
-//		MessageObject check = new MessageObject();
-//		check = messageObjectRepository.findBymessageNumber(restId);
-//		if(check.getMessageNumber()!= null)
-//		{
-//			getMessage.setType("FOUND");
-//		}
-//		else 
-//		{
-//			getMessage.setType("NOT FOUND");
-//		}
-	
-	
+		MessageObject check = new MessageObject();
+
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+		MongoDatabase database = mongoClient.getDatabase("restapidbs");
+		MongoCollection<Document> collection = database.getCollection("RestApi");
+		if (collection.find(eq("restId", restId)).first() != null) {
+			Document myDoc = collection.find(eq("restId", restId)).first();
+			System.out.println(myDoc.get("restId"));
+			getMessage.setData(restId + " WAS FOUND");
+		} else {
+			getMessage.setData(restId + " NOT FOUND");
+		}
+
 		return getMessage;
 	}
 	
@@ -82,17 +93,21 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	@Override
 	public MessageObject createRestApiData(RestAPI restApi) {
 		List<String> fileOfRest = new ArrayList<>();
+		RestApi entity = new RestApi();
 		
-//		restApi.setRestId(String.valueOf(_id));
-//		RestApi = findFirstByOrderByIdDesc();
-//		
-//		_id = _id ++;
+
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+		MongoDatabase database = mongoClient.getDatabase("restapidbs");
+		MongoCollection<Document> collection = database.getCollection("RestApi");
+		long a = collection.count();
+
+
+		long temp = a +1;
+		entity.setRestId(String.valueOf(temp));
+
 		
-		if(restApi.getRestId() == null)
-		{
-			restApi.setRestId(String.valueOf(0));
-		}
-		// working on this later
+
+
 		MessageObject post = new MessageObject();
 		post.setData("generate restapi files successful");
 		post.setType("POST");
@@ -117,11 +132,12 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		
 		post.setData("Complete");
 		post.setType("Generate completed");
+		
 		restApi.setRestStatus(post);
-		RestApi entity = new RestApi();
+		
 		entity.setFileOfRest(restApi.getFileOfRest());
 		entity.setLastModifying(restApi.getLastModifying());
-		entity.setRestId(restApi.getRestId());
+//		entity.setRestId(restApi.getRestId());
 		entity.setRestLocation(restApi.getRestLocation());
 		entity.setRestName(restApi.getRestName());
 		entity.setRestStatus(restApi.getRestStatus());
@@ -194,6 +210,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
+			
 			e.printStackTrace();
 		}
 	}
@@ -226,7 +243,10 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		result.append("import org.springframework.web.bind.annotation.RequestMapping;\n");
 		result.append("import org.springframework.web.bind.annotation.RestController;\n");
 		result.append("import org.springframework.ui.Model;\n");
-		result.append("import pb360.*;");
+		result.append("import pb360.*;\n");
+		result.append("import org.springframework.http.HttpHeaders;\n");
+		result.append("import org.springframework.hateoas.Resources;\n");
+		result.append("import org.springframework.hateoas.ResourceSupport;");
 		
 		
 		
@@ -300,39 +320,42 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		
 		result.append("\n}");
 		input = result.toString();
+		
+		
+
 	
-		
-//		input = input.replace("ControllerName", controllerName);
-//		if(fileIndex == 0)
-//		{
-//			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\model");
-//		}
-//		else if(fileIndex == 1)
-//		{
-//			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\option");
-//		}
-//		else if(fileIndex == 2)
-//		{
-//			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\service");
-//		}
-//		else if(fileIndex == 3)
-//		{
-//			writeToJavaFile(input, name, "");
-//		}
-//		else if(fileIndex ==4)
-//		{
-//			writeToJavaFile(input, name, "");
-//		}
-//		else if(fileIndex == 5)
-//		{
-//			writeToJavaFile(input, name, "");
-//		}
-//		else
-//		{
-//			System.out.println("something WRONG");
-//		}
-		
+		if(fileIndex == 0)
+		{
+			writeToJavaFile(input, name, "D:/restapi/nextgen-sti/src/main/java/pb360/model");
+		}
+		else if (fileIndex == 1)
+		{
+			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\validation");
+		}
+		else if(fileIndex == 2)
+		{
+			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\service\\options");
+		}
+		else if(fileIndex == 3)
+		{
+			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\service");
+		}
+		else if(fileIndex == 4)
+		{
+			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\utils");
+		}
+		else if(fileIndex == 5)
+		{
+			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\controller");
+		}
+		else if(fileIndex == 6)
+		{
+			writeToJavaFile(input, name, "D:\\restapi\\nextgen-sti\\src\\main\\java\\pb360\\common");
+		}
+		else
+		{
 		writeToJavaFile(input, name, defaultLink);
+		}
 
 	}
 
@@ -846,7 +869,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	public void writeToJavaFile(String stringData, String fileName, String link) {
 		try {
-			String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
+			defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
 
 			File file = new File(link, fileName + ".java");
 			if (file.exists()) {
