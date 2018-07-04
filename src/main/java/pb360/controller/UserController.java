@@ -30,7 +30,6 @@ public class UserController {
 	public HttpEntity<MessageObject> createNewUser(@Valid @RequestBody UserModel user) {
 		MessageObject messageObject = userService.register(user);
 		if (messageObject != null) {
-			messageObject.add(linkTo(methodOn(UserController.class).getClass()).withRel(user.getUsername()));
 			return new ResponseEntity<MessageObject>(messageObject, HttpStatus.OK);
 		}
 
