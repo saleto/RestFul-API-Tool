@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,8 +59,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		getMessage.setData("Get RestApi data successful: " + restId);
 		getMessage.setType("GET");
 		getMessage.setDatetime(getCurrentDateTime().getDatetime());
-		MessageObject check = new MessageObject();
 
+		@SuppressWarnings("resource")
 		MongoClient mongoClient = new MongoClient("localhost", 27017);
 		MongoDatabase database = mongoClient.getDatabase("restapidbs");
 		MongoCollection<Document> collection = database.getCollection("RestApi");
@@ -94,19 +94,15 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 	public MessageObject createRestApiData(RestAPI restApi) {
 		List<String> fileOfRest = new ArrayList<>();
 		RestApi entity = new RestApi();
-		
 
+		@SuppressWarnings("resource")
 		MongoClient mongoClient = new MongoClient("localhost", 27017);
 		MongoDatabase database = mongoClient.getDatabase("restapidbs");
 		MongoCollection<Document> collection = database.getCollection("RestApi");
 		long a = collection.count();
 
-
-		long temp = a +1;
+		long temp = a + 1;
 		entity.setRestId(String.valueOf(temp));
-
-		
-
 
 		MessageObject post = new MessageObject();
 		post.setData("generate restapi files successful");
@@ -114,8 +110,6 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		post.setDatetime(getCurrentDateTime().getDatetime());
 		String filename = restApi.getRestName();
 		String directory = restApi.getRestUrl();
-		
-		
 
 		readJson(json_link, filename, directory);
 		fileOfRest.add(filename + "Model");
@@ -124,25 +118,24 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		fileOfRest.add(filename + "JUnitTest");
 		fileOfRest.add(filename + "Controller");
 		fileOfRest.add(filename + "Common");
-		
+
 		restApi.setFileOfRest(fileOfRest);
 		restApi.setRestName(filename);
 		restApi.getRestUrl();
 		restApi.setRestLocation("pb360.test.");
-		
+
 		post.setData("Complete");
 		post.setType("Generate completed");
-		
+
 		restApi.setRestStatus(post);
-		
+
 		entity.setFileOfRest(restApi.getFileOfRest());
 		entity.setLastModifying(restApi.getLastModifying());
-//		entity.setRestId(restApi.getRestId());
 		entity.setRestLocation(restApi.getRestLocation());
 		entity.setRestName(restApi.getRestName());
 		entity.setRestStatus(restApi.getRestStatus());
 		entity.setRestUrl(restApi.getRestUrl());
-		
+
 		messageObjectRepository.save(entity);
 		return post;
 	}
@@ -162,6 +155,21 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		delete.setData("delete restapi files successful: " + restId);
 		delete.setType("DELETE");
 		delete.setDatetime(getCurrentDateTime().getDatetime());
+
+		@SuppressWarnings("resource")
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+		MongoDatabase database = mongoClient.getDatabase("restapidbs");
+		MongoCollection<Document> collection = database.getCollection("RestApi");
+
+		if (collection.find(eq("restId", restId)).first() == null) {
+
+			System.out.println("NOT FOUND");
+			delete.setData(restId + " WAS NOT FOUND IN THIS");
+		} else {
+			collection.findOneAndDelete(eq("restId", restId));
+			delete.setData(restId + "WAS DELETED");
+			System.out.println("FOUND");
+		}
 
 		return delete;
 	}
@@ -259,39 +267,33 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 				result.append(listAnnotationData.get(i).getAnnotationStarts());
 				result.append("\n");
 			}
-			
+
 			for (int o = 0; o < listAnnotationData.get(i).getAnnotationContent().size(); o++) {
-				
-				if(listAnnotationData.get(i).getAnnotationContent().get(o) == null)
-				{
+
+				if (listAnnotationData.get(i).getAnnotationContent().get(o) == null) {
 					result.append("");
-					
-				}
-				else
-				{
+
+				} else {
 					input = listAnnotationData.get(i).getAnnotationContent().get(o);
-					input = input.replace("{1}", "\""+directory+"\"");
-					result.append(input);				
+					input = input.replace("{1}", "\"" + directory + "\"");
+					result.append(input);
 					result.append("\n");
 				}
-				
+
 			}
 
 			if (listAnnotationData.get(i).getAnnotationEnds() != null) {
 				result.append(listAnnotationData.get(i).getAnnotationEnds());
 			}
-		
-			
-		}
 
+		}
 		
 		result.append("\n");
-		if(jsonNode.getClassHeader()!= null)
-		{
+		if (jsonNode.getClassHeader() != null) {
 			input = jsonNode.getClassHeader();
 			input = input.replace("{1}", controllerName);
 			result.append(input);
-		
+
 			result.append("{\n");
 		}
 		
@@ -354,7 +356,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		}
 		else
 		{
-		writeToJavaFile(input, name, defaultLink);
+			writeToJavaFile(input, name, defaultLink);
 		}
 
 	}
@@ -634,7 +636,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 					}
 					methodData.setBody(bodyList);
 				}
-//				methodData.setBody(bodyList);
+
 				listMethodData.add(methodData);
 
 			}
@@ -738,7 +740,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 					}
 					methodData.setBody(bodyList);
 				}
-//				methodData.setBody(bodyList);
+
 				listMethodData.add(methodData);
 
 			}
@@ -875,6 +877,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			if (file.exists()) {
 				file.delete();
 			}
+			
 			file.createNewFile();
 
 			FileWriter fileWriter = new FileWriter(file);
