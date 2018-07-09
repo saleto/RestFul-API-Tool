@@ -1,6 +1,7 @@
 package pb360.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import pb360.model.UserModel;
 import pb360.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImplement implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -71,6 +72,11 @@ public class UserServiceImpl implements UserService {
 		messageObject.setDatetime(new Date());
 		return messageObject;
 
+	}
+
+	@Override
+	public List<UserEntity> findAll() {
+		return userRepository.findAll();
 	}
 
 }
