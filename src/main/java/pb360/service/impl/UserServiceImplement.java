@@ -36,11 +36,10 @@ public class UserServiceImplement implements UserService {
 			} else if (userModel.getPassword().length() < 8) {
 				messageObject.setData("Password must be greater than or equal to 8 characters!");
 			} else {
+				messageObject.setData("Create User successful: " + userModel.getUsername());
 				user.setUsername(userModel.getUsername());
 				user.setPassword(userModel.getPassword());
 				userRepository.save(user);
-				messageObject.setData("Create User successful: " + userModel.getUsername() + "\n"
-						+ "Please! Login with your account has just registered.");
 
 			}
 		}
@@ -57,7 +56,7 @@ public class UserServiceImplement implements UserService {
 		if (userEntity != null) {
 			if (username.equalsIgnoreCase(userEntity.getUsername())
 					&& user.getPassword().equals(userEntity.getPassword())) {
-				messageObject.setData("Login User successful: " + username);
+				messageObject.setData("Login User successful:" + username);
 			} else if (!(username.equals(userEntity.getUsername()))) {
 				messageObject.setData("Invalid Username");
 			} else if (!user.getPassword().equals(userEntity.getPassword())) {
@@ -67,7 +66,11 @@ public class UserServiceImplement implements UserService {
 				messageObject.setData("Invalid Password");
 			}
 		} else {
-			messageObject.setData("Invalid Username");
+			if (doesExistByUsername(username)) {
+				messageObject.setData("Account is not exist!");
+			} else {
+				messageObject.setData("Invalid Username");
+			}
 		}
 		messageObject.setDatetime(new Date());
 		return messageObject;
@@ -77,6 +80,11 @@ public class UserServiceImplement implements UserService {
 	@Override
 	public List<UserEntity> findAll() {
 		return userRepository.findAll();
+	}
+
+	@Override
+	public boolean doesExistByUsername(String username) {
+		return userRepository.findByUsername(username) == null;
 	}
 
 }
