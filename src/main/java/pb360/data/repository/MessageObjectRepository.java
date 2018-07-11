@@ -11,7 +11,7 @@ public interface MessageObjectRepository extends MongoRepository<RestApi, String
 	
 //	public RestApi findBymessageNumber(String messageNumber);
 //	public RestApi findFirstByOrderByrestIdDesc();
-	public int countByrestId();
+	public Integer countByrestId();
 	
 
 	

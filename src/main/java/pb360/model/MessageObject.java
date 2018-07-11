@@ -23,7 +23,7 @@ public class MessageObject extends ResourceSupport implements Serializable {
 	}
 
 	public MessageObject(@JsonProperty("datetime") Date datetime, @JsonProperty("type") String type,
-			@JsonProperty("data") String data, @JsonProperty("_id")String messageNumber) {
+			@JsonProperty("data") String data, @JsonProperty("messageNumber")String messageNumber) {
 
 		this.datetime = datetime;
 		this.type = type;
