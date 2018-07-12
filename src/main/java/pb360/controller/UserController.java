@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
 
+import java.util.List;
+
+import pb360.data.entity.UserEntity;
 import pb360.model.MessageObject;
 import pb360.model.UserModel;
 import pb360.service.UserService;
@@ -26,6 +29,11 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public List<UserEntity> getAllUsers() {
+		return userService.findAll();
+	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/registration")
 	public HttpEntity<MessageObject> createNewUser(@Valid @RequestBody UserModel user) {
 		MessageObject messageObject = userService.register(user);
@@ -34,11 +42,6 @@ public class UserController {
 		}
 
 		return new ResponseEntity<MessageObject>(HttpStatus.NO_CONTENT);
-	}
-
-	@RequestMapping(method = RequestMethod.GET)
-	public String fetchUser() {
-		return "Can access";
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{username}")
