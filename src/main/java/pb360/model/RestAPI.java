@@ -13,9 +13,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_DEFAULT)
 public class RestAPI extends ResourceSupport implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String restId;
@@ -47,7 +44,6 @@ public class RestAPI extends ResourceSupport implements Serializable{
 		this.fileOfRest = fileOfRest;
 		this.restLocation = restLocation;
 		this.lastModifying = lastModifying;
-
 	}
 
 	public String getRestId() {

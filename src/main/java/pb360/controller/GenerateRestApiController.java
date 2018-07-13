@@ -35,13 +35,13 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 
 @RestController
-@RequestMapping("/v1/restsful")
+@RequestMapping("/v1/controllers")
 public class GenerateRestApiController {
 
 	@Autowired
 	private GenerateRestApiService generateRestApiService;
 	private ValidateRestAPI valiRestApi;
-
+	//Test
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
