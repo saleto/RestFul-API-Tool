@@ -3,6 +3,8 @@ package pb360.model;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -11,7 +13,7 @@ import pb360.model.embedded.JsonNode;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_DEFAULT)
-public class JsonDataModel implements Serializable {
+public class JsonDataModel extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

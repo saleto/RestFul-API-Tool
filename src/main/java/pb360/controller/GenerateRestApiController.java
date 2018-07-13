@@ -1,5 +1,7 @@
 package pb360.controller;
 
+import pb360.data.entity.RestApi;
+import pb360.data.repository.MessageObjectRepository;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
 
@@ -49,25 +51,27 @@ public class GenerateRestApiController {
 	}
 
 	@RequestMapping(value = "/{restId}", method = RequestMethod.GET)
-	public HttpEntity<MessageObject> getRestApiDetails(@PathVariable("restId") String restId) {
-		MessageObject messageObj = generateRestApiService.getRestApiData(restId);
-		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
+	public HttpEntity<RestAPI> getRestApiDetails(@PathVariable("restId") String restId) {
+		
+		RestAPI restAPI = new RestAPI();
+		restAPI = generateRestApiService.getRestApiData(restId);
+		return new ResponseEntity<RestAPI>(restAPI, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public HttpEntity<Resources<Resource<MessageObject>>> searchAllRestApis() {
+	public HttpEntity<Resources<Resource<RestAPI>>> searchAllRestApis() {
 		List<Link> links = new ArrayList<Link>();
 		List<Link> items = new ArrayList<Link>();
 
-		List<MessageObject> messageObjList = new ArrayList<>();
-		messageObjList = generateRestApiService.searchRestApiData();
-		if (messageObjList == null || messageObjList.isEmpty()) {
-			return new ResponseEntity<Resources<Resource<MessageObject>>>(HttpStatus.NO_CONTENT);
+		List<RestAPI> restAPIList = new ArrayList<>();
+		restAPIList = generateRestApiService.searchRestApiData();
+		if (restAPIList == null || restAPIList.isEmpty()) {
+			return new ResponseEntity<Resources<Resource<RestAPI>>>(HttpStatus.NO_CONTENT);
 		}
 
-		List<Resource<MessageObject>> messageObjResource = new ArrayList<>();
+		List<Resource<RestAPI>> RestAPIResource = new ArrayList<>();
 		int restId = 0;
-		for (MessageObject messageObj : messageObjList) {
+		for (RestAPI restAPI : restAPIList) {
 			restId++;
 			Link activityLink = linkTo(
 					methodOn(GenerateRestApiController.class).getRestApiDetails(String.valueOf(restId)))
@@ -76,16 +80,16 @@ public class GenerateRestApiController {
 					.withRel("item");
 			items.add(item);
 
-			messageObjResource.add(new Resource<MessageObject>(messageObj, activityLink));
+			RestAPIResource.add(new Resource<RestAPI>(restAPI, activityLink));
 		}
 
 		if (items.size() > 0) {
 			links.addAll(items);
 		}
 
-		Resources<Resource<MessageObject>> messageObjResources = new Resources<>(messageObjResource, links);
+		Resources<Resource<RestAPI>> restAPIResources = new Resources<>(RestAPIResource, links);
 
-		return new ResponseEntity<Resources<Resource<MessageObject>>>(messageObjResources, HttpStatus.OK);
+		return new ResponseEntity<Resources<Resource<RestAPI>>>(restAPIResources, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -96,8 +100,13 @@ public class GenerateRestApiController {
 
 	@RequestMapping(value = "/{restId}", method = RequestMethod.DELETE)
 	public HttpEntity<MessageObject> deleteRestApiService(@PathVariable("restId") String restId) {
+		
+		
 		MessageObject messageObj = generateRestApiService.deleteRestApiData(restId);
-		messageObj = generateRestApiService.getRestApiData(restId);
+		
+		
+		RestAPI restAPI = new RestAPI();
+		messageObj = generateRestApiService.deleteRestApiData(restId);
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
 	}
 
