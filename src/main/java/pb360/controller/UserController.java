@@ -31,7 +31,7 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public List<UserEntity> getAllUsers() {
-		return userService.findAll();
+		return userService.findAllUser();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/registration")

@@ -12,7 +12,7 @@ public interface UserService {
 
 	public MessageObject login(String username, UserModel userModel);
 
-	public List<UserEntity> findAll();
+	public List<UserEntity> findAllUser();
 	
 	public boolean doesExistByUsername(String username);
 
