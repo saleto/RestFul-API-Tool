@@ -10,7 +10,7 @@ public interface GenerateRestApiService  {
 
 	public RestAPI getRestApiData(String restId);
 
-	public List<RestAPI> searchRestApiData();
+	public List<RestAPI> searchRestApiData(Integer pageSize,Integer pageNumber ,String filters);
 
 	public MessageObject createRestApiData(RestAPI restApi);
 

@@ -35,7 +35,7 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 
 @RestController
-@RequestMapping("/v1/controllers")
+@RequestMapping("/v1/restsful")
 public class GenerateRestApiController {
 
 	@Autowired
@@ -51,7 +51,11 @@ public class GenerateRestApiController {
 	}
 
 	@RequestMapping(value = "/{restId}", method = RequestMethod.GET)
-	public HttpEntity<RestAPI> getRestApiDetails(@PathVariable("restId") String restId) {
+	public HttpEntity<RestAPI> getRestApiDetails(@PathVariable("restId") String restId
+//			,
+//			@PathVariable("pageSize") String pageSize,
+//			@PathVariable("pageNumber") String pageNumber 
+			) {
 		
 		RestAPI restAPI = new RestAPI();
 		restAPI = generateRestApiService.getRestApiData(restId);
@@ -59,7 +63,8 @@ public class GenerateRestApiController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public HttpEntity<Resources<Resource<RestAPI>>> searchAllRestApis() {
+	public HttpEntity<Resources<Resource<RestAPI>>> searchAllRestApis(@PathVariable("pageSize") String pageSize,
+			@PathVariable("pageNumber ") String pageNumber ,@PathVariable("filters") String filters) {
 		List<Link> links = new ArrayList<Link>();
 		List<Link> items = new ArrayList<Link>();
 
