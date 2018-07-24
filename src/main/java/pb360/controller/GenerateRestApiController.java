@@ -1,7 +1,5 @@
 package pb360.controller;
 
-import pb360.data.entity.RestApi;
-import pb360.data.repository.MessageObjectRepository;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
 
@@ -35,7 +33,7 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 
 @RestController
-@RequestMapping("/v1/controllers")
+@RequestMapping("/v1/restsful")
 public class GenerateRestApiController {
 
 	@Autowired

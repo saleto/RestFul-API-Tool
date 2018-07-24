@@ -40,10 +40,10 @@ import pb360.service.GenerateRestApiService;
 @Service
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
 
-	private static final String json_link = "D:\\restapi\\JSON_Sample.json";
+	private static final String json_link = "D:\\AssignmentsJavaSpring\\JSON_Sample.json";
 	private static final String SEPARATOR_BLANK = "";
 
-	private static String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
+	private static String defaultLink = "D:\\AssignmentsJavaSpring";
 
 	@Autowired
 	private MessageObjectRepository messageObjectRepository;

@@ -1,10 +1,15 @@
 package pb360.controller;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +34,11 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@RequestMapping(method = RequestMethod.GET, value = "/restful", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Pageable> readPageable(@NotNull final Pageable pageable) {
+		return ResponseEntity.ok(pageable);
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public List<UserEntity> getAllUsers() {
 		return userService.findAllUser();
@@ -38,6 +48,7 @@ public class UserController {
 	public HttpEntity<MessageObject> createNewUser(@Valid @RequestBody UserModel user) {
 		MessageObject messageObject = userService.register(user);
 		if (messageObject != null) {
+			messageObject.add(linkTo(methodOn(UserController.class).getClass()).withRel(user.getUsername()));
 			return new ResponseEntity<MessageObject>(messageObject, HttpStatus.OK);
 		}
 

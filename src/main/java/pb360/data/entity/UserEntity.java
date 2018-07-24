@@ -16,20 +16,30 @@ public class UserEntity implements Serializable {
 	private String id;
 	private String username;
 	private String password;
+	private String href;
+
+	public UserEntity(String id, String username, String password, String href) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.href = href;
+	}
 
 	public UserEntity() {
 		super();
 	}
 
-	public UserEntity(String id, String username, String password) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-	}
-
 	public String getId() {
 		return id;
+	}
+
+	public String getHref() {
+		return href;
+	}
+
+	public void setHref(String href) {
+		this.href = href;
 	}
 
 	public void setId(String id) {
