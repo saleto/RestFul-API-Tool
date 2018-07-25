@@ -2,7 +2,7 @@ package pb360.service;
 
 import java.util.List;
 
-
+import org.springframework.data.domain.Page;
 
 import pb360.data.entity.UserEntity;
 import pb360.model.MessageObject;
@@ -18,7 +18,6 @@ public interface UserService {
 
 	public boolean doesExistByUsername(String username);
 
-	List<UserModel> getUsers(int page, int limit);
-	
-	public Object[] getPager(int totalPages, int currentPage, int pageSize);
+	public Page<UserEntity> findPaginated(int page, int size);
+
 }

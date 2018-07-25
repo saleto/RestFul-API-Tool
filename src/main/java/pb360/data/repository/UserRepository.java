@@ -1,6 +1,5 @@
 package pb360.data.repository;
 
-
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -14,6 +13,5 @@ public interface UserRepository
 	public UserEntity findOneByUsername(String username);
 
 	public UserEntity findByUsername(String username);
-
 
 }
