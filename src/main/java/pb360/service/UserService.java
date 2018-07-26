@@ -18,6 +18,6 @@ public interface UserService {
 
 	public boolean doesExistByUsername(String username);
 
-	public Page<UserEntity> findPaginated(int page, int size);
+	public Page<UserEntity> findPaginated(int page, int size, String filter);
 
 }

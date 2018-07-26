@@ -1,5 +1,6 @@
 package pb360.controller;
 
+import pb360.data.entity.RestApi;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
 
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,7 +42,8 @@ public class GenerateRestApiController {
 	@Autowired
 	private GenerateRestApiService generateRestApiService;
 	private ValidateRestAPI valiRestApi;
-	//Test
+
+	// Test
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -48,9 +52,20 @@ public class GenerateRestApiController {
 		binder.setValidator(valiRestApi);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, params = { "page", "size" })
+	public Page<RestApi> findPaginated(@RequestParam("page") int page, @RequestParam("size") int size)
+			throws Exception {
+		Page<RestApi> resultPage = generateRestApiService.findPaginated(page, size);
+		if (page > resultPage.getTotalPages()) {
+			throw new Exception();
+		}
+
+		return resultPage;
+	}
+
 	@RequestMapping(value = "/{restId}", method = RequestMethod.GET)
 	public HttpEntity<RestAPI> getRestApiDetails(@PathVariable("restId") String restId) {
-		
+
 		RestAPI restAPI = new RestAPI();
 		restAPI = generateRestApiService.getRestApiData(restId);
 		return new ResponseEntity<RestAPI>(restAPI, HttpStatus.OK);
@@ -98,11 +113,9 @@ public class GenerateRestApiController {
 
 	@RequestMapping(value = "/{restId}", method = RequestMethod.DELETE)
 	public HttpEntity<MessageObject> deleteRestApiService(@PathVariable("restId") String restId) {
-		
-		
+
 		MessageObject messageObj = generateRestApiService.deleteRestApiData(restId);
-		
-		
+
 		RestAPI restAPI = new RestAPI();
 		messageObj = generateRestApiService.deleteRestApiData(restId);
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);

@@ -31,12 +31,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(method = RequestMethod.GET, value = "/restful", params = { "page", "size" })
-	public Page<UserEntity> findPaginated(@RequestParam("page") int page, @RequestParam("size") int size)
+	@RequestMapping(method = RequestMethod.GET, value = "/restful", params = { "page", "size", "filter" })
+	public Page<UserEntity> findPaginated(@RequestParam("page") int page, @RequestParam("size") int size,
+			@RequestParam("filter") String filter)
 			throws Exception {
-		Page<UserEntity> resultPage = userService.findPaginated(page, size);
+		Page<UserEntity> resultPage = userService.findPaginated(page, size, filter);
 		if (page > resultPage.getTotalPages()) {
-			throw new Exception();
+			return null;
 		}
 
 		return resultPage;
@@ -45,7 +46,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public List<UserEntity> getAllUsers() {
 		return userService.findAllUser();
-	}
+	}	
 
 	@RequestMapping(method = RequestMethod.POST, value = "/registration")
 	public HttpEntity<MessageObject> createNewUser(@Valid @RequestBody UserModel user) {

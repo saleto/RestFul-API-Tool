@@ -91,9 +91,17 @@ public class UserServiceImplement implements UserService {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public Page<UserEntity> findPaginated(int page, int size) {
-
+	public Page<UserEntity> findPaginated(int page, int size, String filter) {
+		Page<UserEntity> userEntity = userRepository.findByKeys(filter);
+		if(userEntity != null) {
+			UserEntity userOnDb = new UserEntity();
+			if(filter.equals(userOnDb.getUsername())) {
+				return userRepository.findAll(new PageRequest(page, size));
+			}
+		}
+		
 		return userRepository.findAll(new PageRequest(page, size));
+		
 	}
 
 }
