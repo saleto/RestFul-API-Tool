@@ -15,4 +15,5 @@ public interface UserService {
 	public List<UserEntity> findAll();
 	
 	public boolean doesExistByUsername(String username);
+
 }
