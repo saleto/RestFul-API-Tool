@@ -1,5 +1,6 @@
 package pb360.controller;
 
+import pb360.data.entity.RestApi;
 import pb360.model.MessageObject;
 import pb360.model.RestAPI;
 
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,13 +36,14 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 
 @RestController
-@RequestMapping("/v1/controllers")
+@RequestMapping("/v1/restsful")
 public class GenerateRestApiController {
 
 	@Autowired
 	private GenerateRestApiService generateRestApiService;
 	private ValidateRestAPI valiRestApi;
-	//Test
+
+	// Test
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -48,26 +52,39 @@ public class GenerateRestApiController {
 		binder.setValidator(valiRestApi);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, params = { "page", "size" })
+	public Page<RestApi> findPaginated(@RequestParam("page") int page, @RequestParam("size") int size)
+			throws Exception {
+		Page<RestApi> resultPage = generateRestApiService.findPaginated(page, size);
+		if (page > resultPage.getTotalPages()) {
+			throw new Exception();
+		}
+
+		return resultPage;
+	}
+
 	@RequestMapping(value = "/{restId}", method = RequestMethod.GET)
-	public HttpEntity<MessageObject> getRestApiDetails(@PathVariable("restId") String restId) {
-		MessageObject messageObj = generateRestApiService.getRestApiData(restId);
-		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
+	public HttpEntity<RestAPI> getRestApiDetails(@PathVariable("restId") String restId) {
+
+		RestAPI restAPI = new RestAPI();
+		restAPI = generateRestApiService.getRestApiData(restId);
+		return new ResponseEntity<RestAPI>(restAPI, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public HttpEntity<Resources<Resource<MessageObject>>> searchAllRestApis() {
+	public HttpEntity<Resources<Resource<RestAPI>>> searchAllRestApis() {
 		List<Link> links = new ArrayList<Link>();
 		List<Link> items = new ArrayList<Link>();
 
-		List<MessageObject> messageObjList = new ArrayList<>();
-		messageObjList = generateRestApiService.searchRestApiData();
-		if (messageObjList == null || messageObjList.isEmpty()) {
-			return new ResponseEntity<Resources<Resource<MessageObject>>>(HttpStatus.NO_CONTENT);
+		List<RestAPI> restAPIList = new ArrayList<>();
+		restAPIList = generateRestApiService.searchRestApiData();
+		if (restAPIList == null || restAPIList.isEmpty()) {
+			return new ResponseEntity<Resources<Resource<RestAPI>>>(HttpStatus.NO_CONTENT);
 		}
 
-		List<Resource<MessageObject>> messageObjResource = new ArrayList<>();
+		List<Resource<RestAPI>> RestAPIResource = new ArrayList<>();
 		int restId = 0;
-		for (MessageObject messageObj : messageObjList) {
+		for (RestAPI restAPI : restAPIList) {
 			restId++;
 			Link activityLink = linkTo(
 					methodOn(GenerateRestApiController.class).getRestApiDetails(String.valueOf(restId)))
@@ -76,16 +93,16 @@ public class GenerateRestApiController {
 					.withRel("item");
 			items.add(item);
 
-			messageObjResource.add(new Resource<MessageObject>(messageObj, activityLink));
+			RestAPIResource.add(new Resource<RestAPI>(restAPI, activityLink));
 		}
 
 		if (items.size() > 0) {
 			links.addAll(items);
 		}
 
-		Resources<Resource<MessageObject>> messageObjResources = new Resources<>(messageObjResource, links);
+		Resources<Resource<RestAPI>> restAPIResources = new Resources<>(RestAPIResource, links);
 
-		return new ResponseEntity<Resources<Resource<MessageObject>>>(messageObjResources, HttpStatus.OK);
+		return new ResponseEntity<Resources<Resource<RestAPI>>>(restAPIResources, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -96,8 +113,11 @@ public class GenerateRestApiController {
 
 	@RequestMapping(value = "/{restId}", method = RequestMethod.DELETE)
 	public HttpEntity<MessageObject> deleteRestApiService(@PathVariable("restId") String restId) {
+
 		MessageObject messageObj = generateRestApiService.deleteRestApiData(restId);
-		messageObj = generateRestApiService.getRestApiData(restId);
+
+		RestAPI restAPI = new RestAPI();
+		messageObj = generateRestApiService.deleteRestApiData(restId);
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
 	}
 

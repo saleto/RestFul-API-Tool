@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import pb360.data.entity.UserEntity;
@@ -77,13 +79,28 @@ public class UserServiceImplement implements UserService {
 	}
 
 	@Override
-	public List<UserEntity> findAll() {
+	public List<UserEntity> findAllUser() {
 		return userRepository.findAll();
 	}
 
 	@Override
 	public boolean doesExistByUsername(String username) {
 		return userRepository.findByUsername(username) == null;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public Page<UserEntity> findPaginated(int page, int size, String filter) {
+		Page<UserEntity> userEntity = userRepository.findByKeys(filter);
+		if(userEntity != null) {
+			UserEntity userOnDb = new UserEntity();
+			if(filter.equals(userOnDb.getUsername())) {
+				return userRepository.findAll(new PageRequest(page, size));
+			}
+		}
+		
+		return userRepository.findAll(new PageRequest(page, size));
+		
 	}
 
 }
