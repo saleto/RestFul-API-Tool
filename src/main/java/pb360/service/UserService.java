@@ -14,10 +14,13 @@ public interface UserService {
 
 	public MessageObject login(String username, UserModel userModel);
 
-	public List<UserEntity> findAllUser();
+	public List<UserEntity> findAllUser(String filters, int pageNumber, int pageSize);
 
 	public boolean doesExistByUsername(String username);
 
-	public Page<UserEntity> findPaginated(int page, int size, String filter);
+	public Page<UserEntity> findPaginated(int page, int size);
+	
+	
+
 
 }

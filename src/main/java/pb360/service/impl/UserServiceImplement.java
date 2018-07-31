@@ -80,28 +80,24 @@ public class UserServiceImplement implements UserService {
 	}
 
 	@Override
-	public List<UserEntity> findAllUser() {
-		return userRepository.findAll();
-	}
-
-	@Override
 	public boolean doesExistByUsername(String username) {
 		return userRepository.findByUsername(username) == null;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public Page<UserEntity> findPaginated(int page, int size, String filter) {
-		Page<UserEntity> userEntity = userRepository.findByKeys(filter);
-		if(userEntity != null) {
-			UserEntity userOnDb = new UserEntity();
-			if(filter.equals(userOnDb.getUsername())) {
-				return userRepository.findAll(new PageRequest(page, size));
-			}
-		}
-		
-		return userRepository.findAll(new PageRequest(page, size));
-		
+	public Page<UserEntity> findPaginated(int page, int size) {
+
+		Page<UserEntity> pages = userRepository.findAll(new PageRequest(page, size));
+
+		return pages;
+
+	}
+
+	@Override
+	public List<UserEntity> findAllUser(String filters, int pageNumber, int pageSize) {
+
+		return null;
 	}
 
 }
