@@ -36,44 +36,32 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	private static final int pageNumber = 0;
-	private static final int pageSize = 10;
-
-	// @RequestMapping(method = RequestMethod.GET, value = "/restful", params = {
-	// "page", "size" })
-	// public Page<UserEntity> findPaginated(@RequestParam("page") int page,
-	// @RequestParam("size") int size)
-	// throws Exception {
-	// Page<UserEntity> resultPage = userService.findPaginated(page, size);
-	// if (page > resultPage.getTotalPages()) {
-	// return null;
-	// }
-	//
-	// return resultPage;
-	// }
+	public static final int PAGE_NUMBER = 0;
+	public static final int PAGE_SIZE = 10;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public HttpEntity<List<UserEntity>> searchUsers(@RequestParam(value = "filters", required = false) String filters,
+	public HttpEntity<List<UserEntity>> searchUsers(
+			@RequestParam(value = "filters", required = false) Iterable<String> filters,
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size) {
 
 		if (page == null) {
-			page = pageNumber;
+			page = PAGE_NUMBER;
 		}
 		if (size == null) {
-			size = pageSize;
+			size = PAGE_SIZE;
 		}
-		List<UserEntity> userEntities = userService.findAllUser(filters, pageNumber, pageSize);
+		List<UserEntity> userEntities = userService.findAllUser(filters, page, size);
 		if (userEntities.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
 			ArrayList<Link> links = new ArrayList<>();
-			
+
 			userEntities.forEach(user -> user
 					.add(linkTo(methodOn(UserController.class).searchUsers(filters, page, size)).withSelfRel()));
 		}
 
-		return new ResponseEntity<>(userEntities, HttpStatus.OK);	
+		return new ResponseEntity<>(userEntities, HttpStatus.OK);
 
 	}
 

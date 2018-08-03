@@ -5,7 +5,6 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Document(collection = "UserEntity")
 public class UserEntity implements Serializable {

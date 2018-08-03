@@ -1,11 +1,14 @@
 package pb360.service.impl;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import pb360.data.entity.UserEntity;
@@ -16,6 +19,10 @@ import pb360.service.UserService;
 
 @Service
 public class UserServiceImplement implements UserService {
+
+	public static final int PAGE_NUMBER = 0;
+	public static final int PAGE_SIZE = 10;
+	private long totalUsersCount;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -84,20 +91,32 @@ public class UserServiceImplement implements UserService {
 		return userRepository.findByUsername(username) == null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public Page<UserEntity> findPaginated(int page, int size) {
+	public List<UserEntity> findAllUser(Iterable<String> filters, int pageNumber, int pageSize) {
+		int lastPageNumber;
+		int gotoPageNumber = pageNumber;
+		Set<UserEntity> allUsers = new LinkedHashSet<UserEntity>();
+		for (UserEntity user : userRepository.findAll(gotoPage(gotoPageNumber))) {
+			allUsers.add(user);
+		}
+		totalUsersCount = userRepository.count();
 
-		Page<UserEntity> pages = userRepository.findAll(new PageRequest(page, size));
+		if (filters != null) {
+			if (totalUsersCount % PAGE_SIZE != 0) {
+				lastPageNumber = (int) (totalUsersCount / PAGE_SIZE) + 1;
+			} else {
+				lastPageNumber = (int) (totalUsersCount / PAGE_SIZE);
+			}
+		}
 
-		return pages;
+		return null;
 
 	}
 
 	@Override
-	public List<UserEntity> findAllUser(String filters, int pageNumber, int pageSize) {
-
-		return null;
+	public PageRequest gotoPage(int page) {
+		PageRequest pageRequest = new PageRequest(page, PAGE_SIZE, Sort.Direction.DESC, "id");
+		return pageRequest;
 	}
 
 }
