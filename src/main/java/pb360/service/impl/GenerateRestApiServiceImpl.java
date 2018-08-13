@@ -850,9 +850,4 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		}
 	}
 
-	@Override
-	public Page<RestApi> findPaginated(int page, int size) {
-
-		return restApiRepository.findAll(new PageRequest(page, size));
-	}
 }
