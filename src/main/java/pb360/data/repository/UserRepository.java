@@ -2,7 +2,7 @@ package pb360.data.repository;
 
 import java.util.List;
 
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -17,6 +17,6 @@ public interface UserRepository
 
 	public UserEntity findByUsername(String username);
 
-	public List<UserEntity> findByFilter(String filters, Pageable pageable);
+	public List<UserEntity> findByFilter(String filters, PageRequest pageRequest);
 
 }

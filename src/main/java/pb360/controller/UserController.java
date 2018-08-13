@@ -39,22 +39,21 @@ public class UserController {
 
 		List<UserEntity> userEntities = userService.findAllUsers(filters, page, size);
 		if (userEntities.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<UserEntity>>(HttpStatus.NOT_FOUND);
 		} else {
-
+                                                                                                                                            
 			userEntities.forEach(user -> user
 					.add(linkTo(methodOn(UserController.class).searchUsers(filters, page, size)).withSelfRel()));
 		}
-
-		return new ResponseEntity<>(userEntities, HttpStatus.OK);
+		return new ResponseEntity<List<UserEntity>>(userEntities, HttpStatus.OK);
 
 	}
-
+                                                                                  
 	@RequestMapping(method = RequestMethod.POST, value = "/registration")
 	public HttpEntity<MessageObject> createNewUser(@Valid @RequestBody UserModel user) {
 		MessageObject messageObject = userService.register(user);
 		if (messageObject != null) {
-			return new ResponseEntity<MessageObject>(messageObject, HttpStatus.OK);
+			return new ResponseEntity<MessageObject>(messageObject, HttpStatus.CREATED);
 		}
 		return new ResponseEntity<MessageObject>(HttpStatus.NO_CONTENT);
 	}

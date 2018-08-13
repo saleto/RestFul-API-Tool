@@ -89,24 +89,23 @@ public class UserServiceImplement implements UserService {
 	@Override
 	public List<UserEntity> findAllUsers(String filters, Integer pageNumber, Integer pageSize) {
 
-		if (pageNumber == null) {
-			pageNumber = PAGE_NUMBER;
-		}
-		if (pageSize == null) {
-			pageSize = PAGE_SIZE;
-		}
-		long count = userRepository.count();
-		pageNumber = (int) (count / pageSize);
-
 		if (filters != null) {
-			for (int i = 0; i < pageNumber;) {
+			if (pageNumber == null) {
+				pageNumber = PAGE_NUMBER;
+			}
+			if (pageSize == null) {
+				pageSize = PAGE_SIZE;
+			}
+			long count = userRepository.count();
+			long pages = (int) (count / pageSize);
+
+			for (int i = 0; i < pages;) {
 				List<UserEntity> listUsers = userRepository.findByFilter(filters, PageRequest.of(i, pageSize));
 				return listUsers;
 			}
 		}
 		return null;
-		
-		
+
 	}
 
 }
