@@ -1,8 +1,10 @@
 package pb360.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import pb360.data.entity.UserEntity;
@@ -14,6 +16,8 @@ import pb360.service.UserService;
 @Service
 public class UserServiceImplement implements UserService {
 
+	public static final int PAGE_NUMBER = 0;
+	public static final int PAGE_SIZE = 2;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -80,6 +84,29 @@ public class UserServiceImplement implements UserService {
 	@Override
 	public boolean doesExistByUsername(String username) {
 		return userRepository.findByUsername(username) == null;
+	}
+
+	@Override
+	public List<UserEntity> findAllUsers(String filters, Integer pageNumber, Integer pageSize) {
+
+		if (pageNumber == null) {
+			pageNumber = PAGE_NUMBER;
+		}
+		if (pageSize == null) {
+			pageSize = PAGE_SIZE;
+		}
+		long count = userRepository.count();
+		pageNumber = (int) (count / pageSize);
+
+		if (filters != null) {
+			for (int i = 0; i < pageNumber;) {
+				List<UserEntity> listUsers = userRepository.findByFilter(filters, PageRequest.of(i, pageSize));
+				return listUsers;
+			}
+		}
+		return null;
+		
+		
 	}
 
 }
