@@ -12,8 +12,7 @@ public interface UserService {
 
 	public MessageObject login(String username, UserModel userModel);
 
-	public List<UserEntity> findAll();
-	
 	public boolean doesExistByUsername(String username);
 
+	public List<UserEntity> findAllUsers(String filters, Integer pageNumber, Integer pageSize);
 }

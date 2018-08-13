@@ -5,8 +5,6 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Document(collection = "UserEntity")
 public class UserEntity implements Serializable {
 
@@ -17,15 +15,15 @@ public class UserEntity implements Serializable {
 	private String username;
 	private String password;
 
-	public UserEntity() {
-		super();
-	}
-
-	public UserEntity(String id, String username, String password) {
+	public UserEntity(String id, String username, String password, String href) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
+	}
+
+	public UserEntity() {
+		super();
 	}
 
 	public String getId() {

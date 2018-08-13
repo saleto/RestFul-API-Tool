@@ -19,6 +19,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.MongoClient;
@@ -40,25 +42,25 @@ import pb360.service.GenerateRestApiService;
 @Service
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
 
-	private static final String json_link = "D:\\restapi\\JSON_Sample.json";
+	private static final String json_link = "D:\\AssignmentsJavaSpring\\JSON_Sample.json";
 	private static final String SEPARATOR_BLANK = "";
 
-	private static String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
+	private static String defaultLink = "D:\\AssignmentsJavaSpring";
 
 	@Autowired
 	private MessageObjectRepository messageObjectRepository;
-	
+
 	@Autowired
 	private RestApiRepository restApiRepository;
 
 	@Override
 	public RestAPI getRestApiData(String restId) {
 
-//		List<RestApi> listRestApi = restApiRepository.findByRestIdContaining(restId);
+		// List<RestApi> listRestApi = restApiRepository.findByRestIdContaining(restId);
 		List<RestApi> listRestApi = restApiRepository.findByRestId(restId);
 
-//		RestApi restApi = restApiRepository.findByRestIdContaining(restId);
-		RestApi restApi = listRestApi.get(0);	
+		// RestApi restApi = restApiRepository.findByRestIdContaining(restId);
+		RestApi restApi = listRestApi.get(0);
 
 		RestAPI restApiModel = new RestAPI();
 		restApiModel.setRestStatus(restApi.getRestStatus());
@@ -78,14 +80,12 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		List<RestAPI> RestAPIModelList = new ArrayList<RestAPI>();
 		List<String> fileList = new ArrayList<>();
 		RestAPI restApiModel = new RestAPI();
-		
+
 		restApiList = restApiRepository.findAll();
-	
-		
-		for (int i = 0; i < restApiList.size(); i++)
-		{
-			
-			restApiModel.setFileOfRest(restApiList.get(i).getFileOfRest());			
+
+		for (int i = 0; i < restApiList.size(); i++) {
+
+			restApiModel.setFileOfRest(restApiList.get(i).getFileOfRest());
 			restApiModel.setLastModifying(restApiList.get(i).getLastModifying());
 			restApiModel.setRestId(restApiList.get(i).getRestId());
 			restApiModel.setRestLocation(restApiList.get(i).getRestLocation());
@@ -94,8 +94,7 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			restApiModel.setRestUrl(restApiList.get(i).getRestUrl());
 			RestAPIModelList.add(restApiModel);
 		}
-		
-		
+
 		return RestAPIModelList;
 	}
 
@@ -850,4 +849,5 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			e.printStackTrace();
 		}
 	}
+
 }
