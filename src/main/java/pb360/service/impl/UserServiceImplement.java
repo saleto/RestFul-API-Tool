@@ -100,7 +100,7 @@ public class UserServiceImplement implements UserService {
 			long pages = (int) (count / pageSize);
 
 			for (int i = 0; i < pages;) {
-				List<UserEntity> listUsers = userRepository.findByFilter(filters, PageRequest.of(i, pageSize));
+				List<UserEntity> listUsers = userRepository.findByUsername(filters, PageRequest.of(i, pageSize));
 				return listUsers;
 			}
 		}

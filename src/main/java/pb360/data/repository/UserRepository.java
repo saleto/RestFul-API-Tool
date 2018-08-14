@@ -17,6 +17,6 @@ public interface UserRepository
 
 	public UserEntity findByUsername(String username);
 
-	public List<UserEntity> findByFilter(String filters, PageRequest pageRequest);
+	public List<UserEntity> findByUsername(String filters, PageRequest pageRequest);
 
 }
