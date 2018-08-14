@@ -45,8 +45,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	private static final String json_link = "D:\\restapi\\JSON_Sample.json";
 	private static final String SEPARATOR_BLANK = "";
-	private static final Integer INITIAL_PAGE_SIZE = 10;
-	private static final Integer INITIAL_PAGE = 0;
+	private static final Integer PAGE_SIZE = 10;
+	private static final Integer PAGE_NUMBER = 0;
 
 	private static String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
 
@@ -77,8 +77,8 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	@Override
 	public List<RestAPI> searchRestApiData(Integer pageSize,Integer pageNumber ,String filters) {
-		int evalPageSize = pageSize == null || pageSize < 1 ? INITIAL_PAGE_SIZE : pageSize;
-		int evalPage = pageNumber == null || pageNumber < 1 ? INITIAL_PAGE : pageNumber;
+		int evalPageSize = pageSize == null || pageSize < 1 ? PAGE_SIZE : pageSize;
+		int evalPage = pageNumber == null || pageNumber < 1 ? PAGE_NUMBER : pageNumber;
 		
 		Pageable pageable = new PageRequest(evalPage, evalPageSize);
 		
@@ -86,22 +86,51 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 		List<RestAPI> RestAPIModelList = new ArrayList<RestAPI>();
 		List<String> fileList = new ArrayList<>();
 		RestAPI restApiModel = new RestAPI();
+		
+		if (filters != null) {
+			if (pageNumber == null) {
+				pageNumber = PAGE_NUMBER;
+			}
+			if (pageSize == null) {
+				pageSize = PAGE_SIZE;
+			}
+			long count = restApiRepository.count();
+			long pages = (int) (count / pageSize);
 
-		restApiList = restApiRepository.findAll();
+			for (int i = 0; i < pages;) {
+				restApiList = restApiRepository.findByRestId(filters, PageRequest.of(i, pageSize));
+				for (int k = 0; k < restApiList.size(); k++) {
 
-		for (int i = 0; i < restApiList.size(); i++) {
-
-			restApiModel.setFileOfRest(restApiList.get(i).getFileOfRest());
-			restApiModel.setLastModifying(restApiList.get(i).getLastModifying());
-			restApiModel.setRestId(restApiList.get(i).getRestId());
-			restApiModel.setRestLocation(restApiList.get(i).getRestLocation());
-			restApiModel.setRestName(restApiList.get(i).getRestName());
-			restApiModel.setRestStatus(restApiList.get(i).getRestStatus());
-			restApiModel.setRestUrl(restApiList.get(i).getRestUrl());
-			RestAPIModelList.add(restApiModel);
+					restApiModel.setFileOfRest(restApiList.get(i).getFileOfRest());
+					restApiModel.setLastModifying(restApiList.get(i).getLastModifying());
+					restApiModel.setRestId(restApiList.get(i).getRestId());
+					restApiModel.setRestLocation(restApiList.get(i).getRestLocation());
+					restApiModel.setRestName(restApiList.get(i).getRestName());
+					restApiModel.setRestStatus(restApiList.get(i).getRestStatus());
+					restApiModel.setRestUrl(restApiList.get(i).getRestUrl());
+					RestAPIModelList.add(restApiModel);
+				}
+				return RestAPIModelList;
+			}
 		}
+		return null;
 
-		return RestAPIModelList;
+		
+		//restApiList = restApiRepository.findAll();
+//
+//		for (int i = 0; i < restApiList.size(); i++) {
+//
+//			restApiModel.setFileOfRest(restApiList.get(i).getFileOfRest());
+//			restApiModel.setLastModifying(restApiList.get(i).getLastModifying());
+//			restApiModel.setRestId(restApiList.get(i).getRestId());
+//			restApiModel.setRestLocation(restApiList.get(i).getRestLocation());
+//			restApiModel.setRestName(restApiList.get(i).getRestName());
+//			restApiModel.setRestStatus(restApiList.get(i).getRestStatus());
+//			restApiModel.setRestUrl(restApiList.get(i).getRestUrl());
+//			RestAPIModelList.add(restApiModel);
+//		}
+//
+//		return RestAPIModelList;
 	}
 
 	@Override
