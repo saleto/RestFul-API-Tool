@@ -39,11 +39,11 @@ import org.springframework.hateoas.Resources;
 @RequestMapping("/v1/restsful")
 public class GenerateRestApiController {
 
-
 	@Autowired
 	private GenerateRestApiService generateRestApiService;
 	private ValidateRestAPI valiRestApi;
-	//Test
+
+	// Test
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -53,12 +53,8 @@ public class GenerateRestApiController {
 	}
 
 	@RequestMapping(value = "/{restId}", method = RequestMethod.GET)
-	public HttpEntity<RestAPI> getRestApiDetails(@PathVariable("restId") String restId
-//			,
-//			@PathVariable("pageSize") String pageSize,
-//			@PathVariable("pageNumber") String pageNumber 
-			) {
-		
+	public HttpEntity<RestAPI> getRestApiDetails(@PathVariable("restId") String restId) {
+
 		RestAPI restAPI = new RestAPI();
 		restAPI = generateRestApiService.getRestApiData(restId);
 		return new ResponseEntity<RestAPI>(restAPI, HttpStatus.OK);
@@ -66,27 +62,14 @@ public class GenerateRestApiController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public HttpEntity<Resources<Resource<RestAPI>>> searchAllRestApis(
-//			@PathVariable("pageSize") String pageSize,
-//			@PathVariable("pageNumber ") String pageNumber ,
-//			@PathVariable("filters") String filters
 			@RequestParam(value = "filters", required = false) String filters,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "size", required = false) Integer size
-			) {
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "size", required = false) Integer size) {
 		List<Link> links = new ArrayList<Link>();
 		List<Link> items = new ArrayList<Link>();
-		
-//		 if (page == null) {
-//	            page = PAGE_NUMBER;
-//	        }
-//	        if (size == null) {
-//	            size = PAGE_SIZE;
-//	        }
-		
-		
 
 		List<RestAPI> restAPIList = new ArrayList<>();
-		restAPIList = generateRestApiService.searchRestApiData(size,page ,filters);
+		restAPIList = generateRestApiService.searchRestApiData(size, page, filters);
 		if (restAPIList == null || restAPIList.isEmpty()) {
 			return new ResponseEntity<Resources<Resource<RestAPI>>>(HttpStatus.NO_CONTENT);
 		}
@@ -117,16 +100,14 @@ public class GenerateRestApiController {
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody HttpEntity<MessageObject> createRestApiService(@Valid @RequestBody RestAPI restApi) {
 		MessageObject messageObj = generateRestApiService.createRestApiData(restApi);
-		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK); 
+		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{restId}", method = RequestMethod.DELETE)
 	public HttpEntity<MessageObject> deleteRestApiService(@PathVariable("restId") String restId) {
-		
-		
+
 		MessageObject messageObj = generateRestApiService.deleteRestApiData(restId);
-		
-		
+
 		RestAPI restAPI = new RestAPI();
 		messageObj = generateRestApiService.deleteRestApiData(restId);
 		return new ResponseEntity<MessageObject>(messageObj, HttpStatus.OK);
