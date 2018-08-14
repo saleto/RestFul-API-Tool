@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import pb360.model.MessageObject;
 
@@ -29,10 +28,8 @@ public final class RestApi implements Serializable {
 		super();
 	}
 
-	public RestApi( String restId,  String restName,
-			 String restUrl,  MessageObject restStatus,
-			 List<String> fileOfRest,  String restLocation,
-			 Date lastModifying) {
+	public RestApi(String restId, String restName, String restUrl, MessageObject restStatus, List<String> fileOfRest,
+			String restLocation, Date lastModifying) {
 		this.restId = restId;
 		this.restName = restName;
 		this.restUrl = restUrl;

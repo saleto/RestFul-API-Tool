@@ -20,8 +20,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import org.springframework.stereotype.Service;
 
 import com.mongodb.MongoClient;
@@ -43,12 +46,12 @@ import pb360.service.GenerateRestApiService;
 @Service
 public final class GenerateRestApiServiceImpl implements GenerateRestApiService {
 
-	private static final String json_link = "D:\\restapi\\JSON_Sample.json";
+	private static final String json_link = "D:\\AssignmentsJavaSpring\\JSON_Sample.json";
 	private static final String SEPARATOR_BLANK = "";
 	private static final Integer PAGE_SIZE = 10;
 	private static final Integer PAGE_NUMBER = 0;
 
-	private static String defaultLink = "D:/restapi/RestFul-API-Tool/javaData";
+	private static String defaultLink = "D:\\AssignmentsJavaSpring";
 
 	@Autowired
 	private MessageObjectRepository messageObjectRepository;
@@ -58,7 +61,9 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 
 	@Override
 	public RestAPI getRestApiData(String restId) {
+
 		List<RestApi> listRestApi = restApiRepository.findByRestId(restId);
+
 		RestApi restApi = listRestApi.get(0);
 
 		RestAPI restApiModel = new RestAPI();
@@ -866,4 +871,5 @@ public final class GenerateRestApiServiceImpl implements GenerateRestApiService 
 			e.printStackTrace();
 		}
 	}
+
 }
