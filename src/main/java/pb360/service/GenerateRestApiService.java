@@ -20,6 +20,5 @@ public interface GenerateRestApiService  {
 
 	public MessageObject deleteRestApiData(String restId);
 	
-	public Page<RestApi> findPaginated(int page, int size);
 
 }

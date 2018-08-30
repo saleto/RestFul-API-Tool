@@ -1,6 +1,8 @@
 package pb360.data.repository;
 
-import org.springframework.data.domain.Page;
+import java.util.List;
+
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -14,7 +16,7 @@ public interface UserRepository
 	public UserEntity findOneByUsername(String username);
 	
 	public UserEntity findByUsername(String username);
-	
-	public Page<UserEntity> findByKeys(String keys);
+
+	public List<UserEntity> findByUsername(String filters, PageRequest pageRequest);
 
 }
