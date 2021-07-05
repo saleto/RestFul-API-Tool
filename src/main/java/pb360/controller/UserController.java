@@ -32,22 +32,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public HttpEntity<List<UserEntity>> searchUsers(@RequestParam(value = "filters", required = false) String filters,
-			@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size) {
 
-		List<UserEntity> userEntities = userService.findAllUsers(filters, page, size);
-		if (userEntities.isEmpty()) {
-			return new ResponseEntity<List<UserEntity>>(HttpStatus.NOT_FOUND);
-		} else {
-                                                                                                                                            
-			userEntities.forEach(user -> user
-					.add(linkTo(methodOn(UserController.class).searchUsers(filters, page, size)).withSelfRel()));
-		}
-		return new ResponseEntity<List<UserEntity>>(userEntities, HttpStatus.OK);
-
-	}
                                                                                   
 	@RequestMapping(method = RequestMethod.POST, value = "/registration")
 	public HttpEntity<MessageObject> createNewUser(@Valid @RequestBody UserModel user) {

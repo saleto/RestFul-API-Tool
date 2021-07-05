@@ -44,7 +44,6 @@ public class UserServiceImplement implements UserService {
 				user.setUsername(userModel.getUsername());
 				user.setPassword(userModel.getPassword());
 				userRepository.save(user);
-
 			}
 		}
 		messageObject.setDatetime(new Date());
@@ -60,7 +59,7 @@ public class UserServiceImplement implements UserService {
 		if (userEntity != null) {
 			if (username.equalsIgnoreCase(userEntity.getUsername())
 					&& user.getPassword().equals(userEntity.getPassword())) {
-				messageObject.setData("Login User successful:" + username);
+				messageObject.setData("Login User successful: " + username);
 			} else if (!(username.equals(userEntity.getUsername()))) {
 				messageObject.setData("Invalid Username");
 			} else if (!user.getPassword().equals(userEntity.getPassword())) {
@@ -100,7 +99,7 @@ public class UserServiceImplement implements UserService {
 			long pages = (int) (count / pageSize);
 
 			for (int i = 0; i < pages;) {
-				List<UserEntity> listUsers = userRepository.findByFilter(filters, PageRequest.of(i, pageSize));
+				List<UserEntity> listUsers = userRepository.findByUsername(filters, PageRequest.of(i, pageSize));
 				return listUsers;
 			}
 		}
